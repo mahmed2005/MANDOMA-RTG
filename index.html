@@ -88,7 +88,7 @@
         .logo-section h1 span { color: var(--primary-red); }
         .logo-section p { font-size: 11px; color: var(--text-muted); }
         
-        /* أزرار التنقل المتجاوبة للبي سي والموبايل */
+        /* أزرار التنقل المتجاوبة والممتدة بالكامل في المنتصف لشغل الفراغ */
         .nav-tabs { 
             display: flex; 
             gap: 5px; 
@@ -96,7 +96,9 @@
             padding: 5px; 
             border-radius: 8px; 
             flex-wrap: wrap; 
-            width: 100%;
+            flex: 1; /* تأخذ كامل المساحة المتاحة على اليسار */
+            max-width: 900px; /* تعطي اتساعاً مريحاً جداً على البي سي */
+            margin: 0 auto; /* توسيط القائمة في المساحة المتاحة */
         }
         
         .tab-btn { 
@@ -109,7 +111,7 @@
             font-weight: 600; 
             font-size: 13px; 
             transition: 0.2s; 
-            flex: 1;
+            flex: 1; /* جعل كل زر يتمدد بالتساوي لشغل الفراغ بالكامل */
             text-align: center;
             white-space: nowrap;
         }
@@ -307,7 +309,7 @@
         @media (max-width: 1024px) {
             .grid-pos { grid-template-columns: 1fr; }
             header { justify-content: center; text-align: center; }
-            .nav-tabs { margin-top: 10px; }
+            .nav-tabs { margin-top: 10px; max-width: 100%; }
         }
         
         @media (max-width: 600px) {
@@ -403,7 +405,7 @@
                         <div class="card-title">الحساب والاعتماد</div>
                         <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 12px; border:1px solid var(--border-color);">
                             <input type="checkbox" id="checkCustomer" onchange="toggleCustomerView()" style="transform: scale(1.2); vertical-align: middle;">
-                            <label for="checkCustomer" style="font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 6px; vertical-align: middle;">إإدخال بيانات زبون الشحن والتوصيل</label>
+                            <label for="checkCustomer" style="font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 6px; vertical-align: middle;">إإدخل بيانات زبون الشحن والتوصيل</label>
                             <div class="customer-grid" id="customerBox" style="display: none;">
                                 <input type="text" id="cName" class="input-field" placeholder="اسم الزبون بالكامل">
                                 <input type="text" id="cPhone" class="input-field" placeholder="رقم الهاتف الأساسي">
@@ -579,7 +581,7 @@
                     let p = globalProducts[b]; let displayCost = (parseFloat(p.cost) || 0).toFixed(2); let displayPrice = (parseFloat(p.price) || 0).toFixed(2);
                     select.innerHTML += `<option value="${b}">${p.name}</option>`; restockSelect.innerHTML += `<option value="${b}">${p.name} [كود: ${b}]</option>`;
                     let realQty = parseFloat(p.qty) || 0; let badge = realQty <= 3 ? '<span class="stock-badge stock-danger">وشك النفاذ 🚨</span>' : '<span class="stock-badge stock-safe">متوفر</span>';
-                    invBody.innerHTML += `<tr><td>${b}</td><td style="font-weight:600;">${p.name}</td><td style="font-weight:bold; color:var(--color-digital);">${realQty} قطعة</td><td>${displayCost} د.ل</td><td style="color:var(--primary-red); font-weight:bold;">${displayPrice} د.ل</td><td>${badge}</td></tr>`;
+                    invBody.innerHTML += `<tr><td>${b}</td><td style="font-weight:600;">${p.name}</td><td style="font-weight:bold; color:var(--color-digital);">${realQty} قطعة</td><td>${displayCost} d.ل</td><td style="color:var(--primary-red); font-weight:bold;">${displayPrice} د.ل</td><td>${badge}</td></tr>`;
                 }
             };
             const s = document.createElement('script'); s.id = 'jsonp-engine'; s.src = `${url}?action=getProducts&callback=handleSpreadsheetResponse`; document.body.appendChild(s);
