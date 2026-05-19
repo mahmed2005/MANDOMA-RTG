@@ -158,7 +158,7 @@
             align-items: center; 
         }
         
-        /* تقسيم شاشة البيع الافتراضي للحاسوب لشاشات العرض الكبيرة */
+        /* تقسيم شاشة البيع الافتراضي للحاسوب */
         .grid-pos { 
             display: grid; 
             grid-template-columns: 1.6fr 1.4fr; 
@@ -316,9 +316,8 @@
         .btn-small { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-light); padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
         .btn-small:hover { background: var(--primary-red); color: white; }
 
-        /* 📱 تحسينات الهواتف والتابلت لحل مشكلة فراغ شاشة البيع العلوي */
+        /* تحسينات الهواتف والتابلت لحل مشكلة فراغ شاشة البيع العلوي */
         @media (max-width: 1024px) {
-            /* إلغاء الـ Grid الثنائي في شاشة البيع وجعل المكونات تمتد بالكامل لمنع الفراغ الجانبي */
             .grid-pos { 
                 grid-template-columns: 1fr !important; 
                 display: flex;
@@ -487,14 +486,14 @@
                             <div><label style="font-size: 11px; font-weight: 600;">سعر الجملة:</label><input type="number" id="newProdCost" class="input-field" placeholder="10.50" step="0.01"></div>
                             <div><label style="font-size: 11px; font-weight: 600;">سعر البيع:</label><input type="number" id="newProdPrice" class="input-field" placeholder="45.00" step="0.01"></div>
                         </div>
-                        <div style="margin-bottom: 15px;">
+                        <div style="margin-top: 15px;">
                             <label style="font-size: 12px; font-weight: 600;">كود/باركود السلعة الجديد:</label>
                             <div style="display: flex; gap: 8px; align-items: center;">
                                 <input type="text" id="newProdBarcode" class="input-field" placeholder="اضرب الكود أو اكتبه...">
                                 <button class="btn" style="background:#2d3142; font-size:12px; padding:12px 10px; margin-top:4px; white-space:nowrap;" onclick="generateAutoBarcodeForNewProduct()">توليد تلقائي 🎲</button>
                             </div>
                         </div>
-                        <button class="btn" style="width:100%; padding:14px; background:var(--color-success); color:black;" onclick="submitNewProductToGoogle()">📥 حفظ وإدراج كمنتج جديد</button>
+                        <button class="btn" style="width:100%; padding:14px; background:var(--color-success); color:black; margin-top:15px;" onclick="submitNewProductToGoogle()">📥 حفظ وإدراج كمنتج جديد</button>
                     </div>
                     <div class="card">
                         <div class="card-title">📦 تزويد كمية واردة جديدة لمنتج متوفر مسبقاً</div>
@@ -560,7 +559,7 @@
             <div id="returns-tab" class="tab-content">
                 <div class="card">
                     <div class="card-title">🔄 معالجة الشحنات المرجوعة من شركة التوصيل</div>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6;">عند إدخال رقم الفاتورة هنا، ستقوم المنظومة بتعديل حالتها في ملف الجوجل شيت لـ (راجع)، تصفير ربحها، وإعادة إرجاع كميات قطعها إلى المخزن أوتوماتيكياً لحفظ دقة المخزن والمالية.</p>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6;">عند إدخال رقم الفاتورة هنا، ستقوم المنظومة بالبحث التلقائي عن مكونات الفاتورة وسحب بيانات قطعها المسجلة سحابياً لإرجاع كمياتها إلى المخزن بالكامل (مثال: إرجاع قطعتين مبرد)، وتصفير أرباحها على ملف الجوجل شيت.</p>
                     <div style="display: flex; gap: 10px; max-width: 500px; flex-wrap: wrap;">
                         <input type="text" id="returnInvoiceInput" class="input-field" placeholder="أدخل هنا رقم الفاتورة (مثال: RTG-123456)" style="flex: 1; min-width: 200px;">
                         <button class="btn" style="background: var(--color-return); padding: 12px 20px; width: 100%; max-width: none; flex: 1; min-width: 150px;" onclick="processOrderReturnToGoogle()">تأكيد وإرجاع للمخزن والشيت 🔁</button>
@@ -707,13 +706,43 @@
             fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
             .then(() => { showToast("📦 تم تزويد المخزن ودمج الكمية الجديدة بنجاح!"); document.getElementById('restockQtyInput').value = ''; document.getElementById('restockSelectProduct').value = ''; syncProducts(url); });
         }
+        
+        /* 🔄 تعديل دالة المرتجعات: سحب القطع الحقيقية من الـ History وإرسالها لإرجاع العدد تلقائياً للمخزن */
         function processOrderReturnToGoogle() {
-            const url = localStorage.getItem('rtg_script_url'); let id = document.getElementById('returnInvoiceInput').value.trim(); if(!url || !id) { alert("أدخل رقم الفاتورة!"); return; }
-            let target = cloudOrdersHistory.find(x => x.id === id); const payload = { action: "markAsReturned", invoiceId: id, cartItems: target ? [{code: "UNKNOWN", qty: 0}] : [] };
-            showToast("🔄 جاري إرسال الإشعار وتحديث الشيت والكميات...");
+            const url = localStorage.getItem('rtg_script_url'); let id = document.getElementById('returnInvoiceInput').value.trim(); 
+            if(!url || !id) { alert("أدخل رقم الفاتورة أولاً!"); return; }
+            
+            // البحث عن الفاتورة في السجل المحلي المسحوب حياً من الجوجل شيت
+            let targetOrder = cloudOrdersHistory.find(x => x.id === id); 
+            let itemsToSend = [];
+            
+            if (targetOrder && targetOrder.items) {
+                // إذا كانت الفاتورة تحتوي على مصفوفة المواد والكميات الجاهزة
+                itemsToSend = targetOrder.items;
+            } else if (targetOrder && targetOrder.cartItems) {
+                itemsToSend = targetOrder.cartItems;
+            } else {
+                // رسالة تنبيه احتياطية في حال لم يتم العثور على الفاتورة في السجل الحالي بعد
+                alert("⚠️ لم يتم العثور على الفاتورة في السجل الحالي، يرجى الضغط على زر (تحديث الفواتير السحابية) للتأكد أولاً!");
+                return;
+            }
+            
+            const payload = { 
+                action: "markAsReturned", 
+                invoiceId: id, 
+                cartItems: itemsToSend 
+            };
+            
+            showToast("🔄 جاري إرسال إشعار المرتجع وإرجاع كميات القطع بدقة للمخزن الحقيقي...");
             fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-            .then(() => { document.getElementById('returnInvoiceInput').value = ''; showToast("🔄 تم تحويل الفاتورة لـ (راجع) في جوجل شيت!"); syncProducts(url); setTimeout(syncOrdersOnly, 1500); });
+            .then(() => { 
+                document.getElementById('returnInvoiceInput').value = ''; 
+                showToast("🔄 نجاح! تم تحويل الفاتورة لـ (راجع) وإعادة دمج الأعداد بالمخازن بنجاح!"); 
+                syncProducts(url); 
+                setTimeout(syncOrdersOnly, 1500); 
+            });
         }
+        
         function renderVisualBarcode() { let val = document.getElementById('barcodeCanvasInput').value.trim(); if(val) { JsBarcode("#barcodeTargetSvg", val, { format:"CODE128", width:2, height:40, displayValue:true }); } }
         function printCurrentInvoiceIsolated() {
             if(cart.length === 0) { alert("السلة فارغة!"); return; }
