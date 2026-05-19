@@ -38,6 +38,8 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
+            /* منع أي سكرول جانبي بسبب قفل الحجم */
+            overflow-x: hidden; 
         }
         
         /* شاشة القفل المتجاوبة */
@@ -82,36 +84,37 @@
             align-items: center; 
             flex-wrap: wrap; 
             gap: 15px; 
+            width: 100%;
         }
         
-        .logo-section h1 { font-weight: 900; font-size: 22px; }
+        .logo-section h1 { font-weight: 900; font-size: 22px; white-space: nowrap; }
         .logo-section h1 span { color: var(--primary-red); }
-        .logo-section p { font-size: 11px; color: var(--text-muted); }
+        .logo-section p { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
         
-        /* أزرار التنقل المتجاوبة والممتدة بالكامل في المنتصف لشغل الفراغ */
+        /* توسيع القائمة العلوية لتأخذ كامل المساحة المتبقية بنسبة 100% وإلغاء الفراغ */
         .nav-tabs { 
             display: flex; 
-            gap: 5px; 
+            gap: 8px; 
             background: var(--bg-main); 
-            padding: 5px; 
+            padding: 6px; 
             border-radius: 8px; 
-            flex-wrap: wrap; 
-            flex: 1; /* تأخذ كامل المساحة المتاحة على اليسار */
-            max-width: 900px; /* تعطي اتساعاً مريحاً جداً على البي سي */
-            margin: 0 auto; /* توسيط القائمة في المساحة المتاحة */
+            flex-wrap: nowrap; /* بقاء الأزرار متراصة بجانب بعضها لشغل العرض كاملاً */
+            flex: 1; /* التمدد لملء كامل المساحة الفارغة على اليسار */
+            width: 100%;
+            margin: 0;
         }
         
         .tab-btn { 
             background: none; 
             border: none; 
             color: var(--text-muted); 
-            padding: 10px 14px; 
+            padding: 12px 16px; 
             border-radius: 6px; 
             cursor: pointer; 
-            font-weight: 600; 
-            font-size: 13px; 
+            font-weight: 700; 
+            font-size: 14px; 
             transition: 0.2s; 
-            flex: 1; /* جعل كل زر يتمدد بالتساوي لشغل الفراغ بالكامل */
+            flex: 1; /* جعل كل زر يتمدد بالتساوي بالتفصيل ليأخذ مكانه كاملاً */
             text-align: center;
             white-space: nowrap;
         }
@@ -121,7 +124,7 @@
         .main-content { 
             padding: 15px; 
             flex: 1; 
-            max-width: 1400px; 
+            max-width: 100%; /* تمدد المحتوى بالكامل ليتناسق مع الهيدر العريض */
             width: 100%; 
             margin: 0 auto; 
         }
@@ -305,11 +308,11 @@
         .btn-small { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-light); padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
         .btn-small:hover { background: var(--primary-red); color: white; }
 
-        /* 📱 شاشات الهواتف والتابلت (Media Queries لقلب الديزاين تلقائياً) */
+        /* 📱 شاشات التابلت والهواتف */
         @media (max-width: 1024px) {
             .grid-pos { grid-template-columns: 1fr; }
             header { justify-content: center; text-align: center; }
-            .nav-tabs { margin-top: 10px; max-width: 100%; }
+            .nav-tabs { margin-top: 10px; flex-wrap: wrap; }
         }
         
         @media (max-width: 600px) {
@@ -365,7 +368,7 @@
                 <button class="tab-btn" onclick="switchTab('inventory-tab', this)">📦 جرد المخزن</button>
                 <button class="tab-btn" onclick="switchTab('reports-tab', this)">📊 الأرباح والتقارير</button>
                 <button class="tab-btn" onclick="switchTab('returns-tab', this)">🔄 المرتجعات</button>
-                <button class="tab-btn" onclick="clearLicenseAndLock()" style="color:var(--primary-red); flex: 0.5;">🔒 خروج</button>
+                <button class="tab-btn" onclick="clearLicenseAndLock()" style="color:var(--primary-red); flex: 0.4;">🔒 خروج</button>
             </div>
         </header>
 
@@ -405,7 +408,7 @@
                         <div class="card-title">الحساب والاعتماد</div>
                         <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 12px; border:1px solid var(--border-color);">
                             <input type="checkbox" id="checkCustomer" onchange="toggleCustomerView()" style="transform: scale(1.2); vertical-align: middle;">
-                            <label for="checkCustomer" style="font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 6px; vertical-align: middle;">إإدخل بيانات زبون الشحن والتوصيل</label>
+                            <label for="checkCustomer" style="font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 6px; vertical-align: middle;">إدخال بيانات زبون الشحن والتوصيل</label>
                             <div class="customer-grid" id="customerBox" style="display: none;">
                                 <input type="text" id="cName" class="input-field" placeholder="اسم الزبون بالكامل">
                                 <input type="text" id="cPhone" class="input-field" placeholder="رقم الهاتف الأساسي">
@@ -540,7 +543,6 @@
     <div id="toast">تمت العملية بنجاح! 🔔</div>
 
     <script>
-        // السطر 162: هنا يتم لصق رابط الـ Web App المركزي الخاص بك لترخيص وإدارة المتاجر
         const ADMIN_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxK9GGz87EzNCezo_Smm8If_wpVLTZ1UrlE-JDRkPQOwFaQVGkurxM_oj-8WE-BHMNc8Q/exec"; 
         
         let globalProducts = {}; let cart = []; let selectedStatus = "في الانتظار"; let cloudOrdersHistory = []; 
