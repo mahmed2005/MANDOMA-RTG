@@ -38,7 +38,6 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
-            /* منع أي سكرول جانبي بسبب قفل الحجم */
             overflow-x: hidden; 
         }
         
@@ -87,19 +86,22 @@
             width: 100%;
         }
         
+        .logo-section {
+            text-align: center;
+            width: 100%;
+        }
         .logo-section h1 { font-weight: 900; font-size: 22px; white-space: nowrap; }
         .logo-section h1 span { color: var(--primary-red); }
         .logo-section p { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
         
-        /* توسيع القائمة العلوية لتأخذ كامل المساحة المتبقية بنسبة 100% وإلغاء الفراغ */
+        /* تنسيق القائمة العلوية وحل مشكلة الفراغ في الموبايل */
         .nav-tabs { 
-            display: flex; 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* توزيع متساوي تماماً لحجم الأزرار */
             gap: 8px; 
             background: var(--bg-main); 
-            padding: 6px; 
-            border-radius: 8px; 
-            flex-wrap: nowrap; /* بقاء الأزرار متراصة بجانب بعضها لشغل العرض كاملاً */
-            flex: 1; /* التمدد لملء كامل المساحة الفارغة على اليسار */
+            padding: 8px; 
+            border-radius: 10px; 
             width: 100%;
             margin: 0;
         }
@@ -108,23 +110,27 @@
             background: none; 
             border: none; 
             color: var(--text-muted); 
-            padding: 12px 16px; 
-            border-radius: 6px; 
+            padding: 12px 10px; 
+            border-radius: 8px; 
             cursor: pointer; 
             font-weight: 700; 
-            font-size: 14px; 
+            font-size: 13px; 
             transition: 0.2s; 
-            flex: 1; /* جعل كل زر يتمدد بالتساوي بالتفصيل ليأخذ مكانه كاملاً */
             text-align: center;
             white-space: nowrap;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
         }
         
-        .tab-btn.active { background: var(--primary-red); color: white; }
+        .tab-btn.active { 
+            background: var(--primary-red); 
+            color: white; 
+            border-color: var(--primary-red);
+        }
         
         .main-content { 
             padding: 15px; 
             flex: 1; 
-            max-width: 100%; /* تمدد المحتوى بالكامل ليتناسق مع الهيدر العريض */
             width: 100%; 
             margin: 0 auto; 
         }
@@ -151,7 +157,7 @@
             align-items: center; 
         }
         
-        /* تقسيم شاشة البيع - افتراضي للبي سي عمودين بجانب بعض */
+        /* تقسيم شاشة البيع - افتراضي لشاشات العرض الكبيرة */
         .grid-pos { 
             display: grid; 
             grid-template-columns: 1.6fr 1.4fr; 
@@ -308,19 +314,30 @@
         .btn-small { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-light); padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
         .btn-small:hover { background: var(--primary-red); color: white; }
 
-        /* 📱 شاشات التابلت والهواتف */
+        /* 📱 تحسينات الشاشات المتوسطة والصغيرة لمنع الفراغات بالكامل */
         @media (max-width: 1024px) {
             .grid-pos { grid-template-columns: 1fr; }
             header { justify-content: center; text-align: center; }
-            .nav-tabs { margin-top: 10px; flex-wrap: wrap; }
+            .nav-tabs { 
+                grid-template-columns: repeat(3, 1fr); /* 3 أزرار في كل صف لتتوزع بالتساوي الكلي وتغلق الفراغ الجانبي */
+                width: 100%; 
+            }
         }
         
         @media (max-width: 600px) {
-            .nav-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+            .nav-tabs { 
+                grid-template-columns: repeat(2, 1fr); /* زرين في كل صف لتغطية كامل عرض شاشة الموبايل بالتفصيل وبأناقة */
+            }
+            /* جعل زر الخروج يأخذ صفاً كاملاً في النهاية ليصبح متناسقاً ولا يترك فراغاً فردياً */
+            .nav-tabs button:last-child {
+                grid-column: span 2;
+                color: var(--primary-red);
+                background-color: rgba(255, 30, 66, 0.05);
+                border-color: rgba(255, 30, 66, 0.2);
+            }
             .customer-grid { grid-template-columns: 1fr; }
-            .status-selectors { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .status-selectors { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .status-opt { padding: 12px; font-size: 13px; }
-            .logo-section { width: 100%; }
             .tab-btn { padding: 12px 8px; font-size: 12px; }
             td, th { padding: 10px 6px; font-size: 12px; }
             .editable-price-input { width: 65px; padding: 4px; }
@@ -331,7 +348,7 @@
 
     <div id="lock-screen">
         <div class="lock-card">
-            <h2 style="font-weight: 900; margin-bottom: 5px; font-size: 24px;">RTG <span>SaaS POS</span></h2>
+            <h2 style="font-weight: 900; margin-bottom: 5px; font-size: 24px;">RTG <span>Saas POS</span></h2>
             <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 25px;">منظومة إدارة المبيعات والمخازن السحابية الذكية للمتاجر</p>
             <div id="lock-msg" style="margin-bottom: 15px; color: var(--primary-red); font-weight: bold; font-size: 13px;">يرجى تفعيل رخصة المنظومة للولوج والبدء</div>
             <input type="text" id="licenseKeyField" class="input-field" placeholder="أدخل كود التفعيل السحابي..." style="text-align: center; letter-spacing: 2px; margin-bottom: 15px;">
@@ -359,7 +376,7 @@
     <div class="app-wrapper" id="appMainWrapper">
         <header>
             <div class="logo-section">
-                <h1 id="shopTitleHeader">جاري التحميل... <span>POS</span></h1>
+                <h1 id="shopTitleHeader">RTG-GEARX <span>POS</span></h1>
                 <p>نظام البيع السريع وجرد المخازن للمشتركين</p>
             </div>
             <div class="nav-tabs">
@@ -368,7 +385,7 @@
                 <button class="tab-btn" onclick="switchTab('inventory-tab', this)">📦 جرد المخزن</button>
                 <button class="tab-btn" onclick="switchTab('reports-tab', this)">📊 الأرباح والتقارير</button>
                 <button class="tab-btn" onclick="switchTab('returns-tab', this)">🔄 المرتجعات</button>
-                <button class="tab-btn" onclick="clearLicenseAndLock()" style="color:var(--primary-red); flex: 0.4;">🔒 خروج</button>
+                <button class="tab-btn" onclick="clearLicenseAndLock()">🔒 خروج</button>
             </div>
         </header>
 
