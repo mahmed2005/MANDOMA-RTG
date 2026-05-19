@@ -94,10 +94,10 @@
         .logo-section h1 span { color: var(--primary-red); }
         .logo-section p { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
         
-        /* تنسيق القائمة العلوية وحل مشكلة الفراغ في الموبايل */
+        /* تنسيق الأزرار العلوية */
         .nav-tabs { 
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* توزيع متساوي تماماً لحجم الأزرار */
+            grid-template-columns: repeat(2, 1fr); 
             gap: 8px; 
             background: var(--bg-main); 
             padding: 8px; 
@@ -144,6 +144,7 @@
             border-radius: 12px; 
             padding: 18px; 
             margin-bottom: 15px; 
+            width: 100%;
         }
         
         .card-title { 
@@ -157,12 +158,13 @@
             align-items: center; 
         }
         
-        /* تقسيم شاشة البيع - افتراضي لشاشات العرض الكبيرة */
+        /* تقسيم شاشة البيع الافتراضي للحاسوب لشاشات العرض الكبيرة */
         .grid-pos { 
             display: grid; 
             grid-template-columns: 1.6fr 1.4fr; 
             gap: 15px; 
             align-items: start;
+            width: 100%;
         }
         
         .input-field { 
@@ -314,21 +316,32 @@
         .btn-small { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-light); padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
         .btn-small:hover { background: var(--primary-red); color: white; }
 
-        /* 📱 تحسينات الشاشات المتوسطة والصغيرة لمنع الفراغات بالكامل */
+        /* 📱 تحسينات الهواتف والتابلت لحل مشكلة فراغ شاشة البيع العلوي */
         @media (max-width: 1024px) {
-            .grid-pos { grid-template-columns: 1fr; }
+            /* إلغاء الـ Grid الثنائي في شاشة البيع وجعل المكونات تمتد بالكامل لمنع الفراغ الجانبي */
+            .grid-pos { 
+                grid-template-columns: 1fr !important; 
+                display: flex;
+                flex-direction: column;
+                width: 100% !important;
+            }
             header { justify-content: center; text-align: center; }
             .nav-tabs { 
-                grid-template-columns: repeat(3, 1fr); /* 3 أزرار في كل صف لتتوزع بالتساوي الكلي وتغلق الفراغ الجانبي */
+                grid-template-columns: repeat(3, 1fr); 
                 width: 100%; 
             }
         }
         
         @media (max-width: 600px) {
-            .nav-tabs { 
-                grid-template-columns: repeat(2, 1fr); /* زرين في كل صف لتغطية كامل عرض شاشة الموبايل بالتفصيل وبأناقة */
+            .grid-pos { 
+                grid-template-columns: 1fr !important; 
+                display: flex;
+                flex-direction: column;
+                width: 100% !important;
             }
-            /* جعل زر الخروج يأخذ صفاً كاملاً في النهاية ليصبح متناسقاً ولا يترك فراغاً فردياً */
+            .nav-tabs { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
             .nav-tabs button:last-child {
                 grid-column: span 2;
                 color: var(--primary-red);
@@ -600,7 +613,7 @@
                     let p = globalProducts[b]; let displayCost = (parseFloat(p.cost) || 0).toFixed(2); let displayPrice = (parseFloat(p.price) || 0).toFixed(2);
                     select.innerHTML += `<option value="${b}">${p.name}</option>`; restockSelect.innerHTML += `<option value="${b}">${p.name} [كود: ${b}]</option>`;
                     let realQty = parseFloat(p.qty) || 0; let badge = realQty <= 3 ? '<span class="stock-badge stock-danger">وشك النفاذ 🚨</span>' : '<span class="stock-badge stock-safe">متوفر</span>';
-                    invBody.innerHTML += `<tr><td>${b}</td><td style="font-weight:600;">${p.name}</td><td style="font-weight:bold; color:var(--color-digital);">${realQty} قطعة</td><td>${displayCost} d.ل</td><td style="color:var(--primary-red); font-weight:bold;">${displayPrice} د.ل</td><td>${badge}</td></tr>`;
+                    invBody.innerHTML += `<tr><td>${b}</td><td style="font-weight:600;">${p.name}</td><td style="font-weight:bold; color:var(--color-digital);">${realQty} قطعة</td><td>${displayCost} د.ل</td><td style="color:var(--primary-red); font-weight:bold;">${displayPrice} د.ل</td><td>${badge}</td></tr>`;
                 }
             };
             const s = document.createElement('script'); s.id = 'jsonp-engine'; s.src = `${url}?action=getProducts&callback=handleSpreadsheetResponse`; document.body.appendChild(s);
