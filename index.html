@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RTG POS - المنظومة السحابية المتكاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
@@ -23,61 +23,314 @@
             --color-success: #00e676;
             --color-return: #ff1744;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #090a0e; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .lock-card { background: var(--bg-card); border: 2px solid var(--primary-red); padding: 30px; border-radius: 16px; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(255, 30, 66, 0.2); }
-        .app-wrapper { display: none; flex: 1; flex-direction: column; }
-        header { background: var(--bg-card); padding: 15px 20px; border-bottom: 2px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Cairo', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-light); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        /* شاشة القفل المتجاوبة */
+        #lock-screen { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: #090a0e; 
+            z-index: 9999; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 15px; 
+        }
+        
+        .lock-card { 
+            background: var(--bg-card); 
+            border: 2px solid var(--primary-red); 
+            padding: 30px 20px; 
+            border-radius: 16px; 
+            max-width: 450px; 
+            width: 100%; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(255, 30, 66, 0.2); 
+        }
+        
+        .app-wrapper { 
+            display: none; 
+            flex: 1; 
+            flex-direction: column; 
+        }
+        
+        /* الهيدر المتجاوب */
+        header { 
+            background: var(--bg-card); 
+            padding: 15px; 
+            border-bottom: 2px solid var(--border-color); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+        }
+        
         .logo-section h1 { font-weight: 900; font-size: 22px; }
         .logo-section h1 span { color: var(--primary-red); }
         .logo-section p { font-size: 11px; color: var(--text-muted); }
-        .nav-tabs { display: flex; gap: 5px; background: var(--bg-main); padding: 5px; border-radius: 8px; flex-wrap: wrap; }
-        .tab-btn { background: none; border: none; color: var(--text-muted); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; transition: 0.2s; }
+        
+        /* أزرار التنقل المتجاوبة للبي سي والموبايل */
+        .nav-tabs { 
+            display: flex; 
+            gap: 5px; 
+            background: var(--bg-main); 
+            padding: 5px; 
+            border-radius: 8px; 
+            flex-wrap: wrap; 
+            width: 100%;
+        }
+        
+        .tab-btn { 
+            background: none; 
+            border: none; 
+            color: var(--text-muted); 
+            padding: 10px 14px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 13px; 
+            transition: 0.2s; 
+            flex: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
         .tab-btn.active { background: var(--primary-red); color: white; }
-        .main-content { padding: 15px; flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; }
+        
+        .main-content { 
+            padding: 15px; 
+            flex: 1; 
+            max-width: 1400px; 
+            width: 100%; 
+            margin: 0 auto; 
+        }
+        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px; }
-        .card-title { font-size: 15px; font-weight: 700; margin-bottom: 15px; border-right: 4px solid var(--primary-red); padding-right: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .grid-pos { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 15px; }
-        @media (max-width: 900px) { .grid-pos { grid-template-columns: 1fr; } }
-        .input-field { width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: white; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; margin-top: 4px; }
+        
+        .card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            border-radius: 12px; 
+            padding: 18px; 
+            margin-bottom: 15px; 
+        }
+        
+        .card-title { 
+            font-size: 15px; 
+            font-weight: 700; 
+            margin-bottom: 15px; 
+            border-right: 4px solid var(--primary-red); 
+            padding-right: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        /* تقسيم شاشة البيع - افتراضي للبي سي عمودين بجانب بعض */
+        .grid-pos { 
+            display: grid; 
+            grid-template-columns: 1.6fr 1.4fr; 
+            gap: 15px; 
+            align-items: start;
+        }
+        
+        .input-field { 
+            width: 100%; 
+            background: var(--bg-input); 
+            border: 1px solid var(--border-color); 
+            color: white; 
+            padding: 12px 10px; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            outline: none; 
+            margin-top: 4px; 
+        }
+        
         .input-field:focus { border-color: var(--primary-red); }
-        .btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; }
+        
+        .btn { 
+            background: var(--primary-red); 
+            color: white; 
+            border: none; 
+            padding: 12px 18px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 14px; 
+            transition: 0.2s; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
         .btn:hover { background: var(--primary-red-hover); }
-        .table-container { width: 100%; overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; }
-        th { background: var(--bg-input); color: var(--text-muted); padding: 10px; font-weight: 600; }
-        td { padding: 10px; border-bottom: 1px solid var(--border-color); }
-        .customer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; }
-        .status-selectors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
-        .status-opt { background: var(--bg-input); padding: 8px; text-align: center; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; opacity: 0.4; }
+        
+        /* الجداول المتجاوبة وسهلة اللمس */
+        .table-container { 
+            width: 100%; 
+            overflow-x: auto; 
+            margin-top: 10px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; min-width: 500px; }
+        th { background: var(--bg-input); color: var(--text-muted); padding: 12px 10px; font-weight: 600; }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        
+        .customer-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin-top: 10px; 
+        }
+        
+        .summary-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 10px 0; 
+            border-bottom: 1px dashed var(--border-color); 
+            font-size: 14px; 
+            align-items: center;
+        }
+        
+        /* أزرار الحالات المتجاوبة جداً للموبايل */
+        .status-selectors { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 6px; 
+            margin-top: 8px; 
+        }
+        
+        .status-opt { 
+            background: var(--bg-input); 
+            padding: 10px 4px; 
+            text-align: center; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 11px; 
+            font-weight: bold; 
+            opacity: 0.4; 
+            transition: 0.2s;
+        }
+        
         .status-opt.active { opacity: 1; border: 1px solid white; }
-        .stock-badge { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .stock-badge { padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         .stock-danger { background: rgba(255, 23, 72, 0.2); color: var(--color-return); }
         .stock-safe { background: rgba(0, 230, 118, 0.2); color: var(--color-success); }
-        #toast { position: fixed; bottom: 20px; left: 20px; background: #1aa34a; color: white; padding: 12px 24px; border-radius: 6px; display: none; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .editable-price-input { width: 70px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; padding: 4px; text-align: center; border-radius: 4px; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10500; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; max-width: 450px; width: 100%; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .modal-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        
+        #toast { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: #1aa34a; 
+            color: white; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            display: none; 
+            z-index: 10000; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .editable-price-input { 
+            width: 80px; 
+            background: var(--bg-main); 
+            border: 1px solid var(--border-color); 
+            color: white; 
+            padding: 6px; 
+            text-align: center; 
+            border-radius: 4px; 
+            font-size: 13px;
+        }
+        
+        /* النوافذ المنبثقة المتجاوبة */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            z-index: 10500; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 15px; 
+        }
+        
+        .modal-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            border-radius: 12px; 
+            max-width: 450px; 
+            width: 100%; 
+            padding: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+        }
+        
+        .modal-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
         .modal-row span:first-child { color: var(--text-muted); font-weight: 600; }
         .modal-row span:last-child { color: white; font-weight: bold; }
-        .btn-small { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-light); padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; }
+        
+        .btn-small { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-light); padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
         .btn-small:hover { background: var(--primary-red); color: white; }
+
+        /* 📱 شاشات الهواتف والتابلت (Media Queries لقلب الديزاين تلقائياً) */
+        @media (max-width: 1024px) {
+            .grid-pos { grid-template-columns: 1fr; }
+            header { justify-content: center; text-align: center; }
+            .nav-tabs { margin-top: 10px; }
+        }
+        
+        @media (max-width: 600px) {
+            .nav-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+            .customer-grid { grid-template-columns: 1fr; }
+            .status-selectors { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .status-opt { padding: 12px; font-size: 13px; }
+            .logo-section { width: 100%; }
+            .tab-btn { padding: 12px 8px; font-size: 12px; }
+            td, th { padding: 10px 6px; font-size: 12px; }
+            .editable-price-input { width: 65px; padding: 4px; }
+        }
     </style>
 </head>
 <body>
 
     <div id="lock-screen">
         <div class="lock-card">
-            <h2 style="font-weight: 900; margin-bottom: 5px;">RTG <span>SaaS POS</span></h2>
+            <h2 style="font-weight: 900; margin-bottom: 5px; font-size: 24px;">RTG <span>SaaS POS</span></h2>
             <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 25px;">منظومة إدارة المبيعات والمخازن السحابية الذكية للمتاجر</p>
             <div id="lock-msg" style="margin-bottom: 15px; color: var(--primary-red); font-weight: bold; font-size: 13px;">يرجى تفعيل رخصة المنظومة للولوج والبدء</div>
             <input type="text" id="licenseKeyField" class="input-field" placeholder="أدخل كود التفعيل السحابي..." style="text-align: center; letter-spacing: 2px; margin-bottom: 15px;">
-            <button class="btn" style="width: 100%; padding: 12px;" onclick="verifyLicense()">تفعيل والولوج الآن 🔓</button>
+            <button class="btn" style="width: 100%; padding: 14px;" onclick="verifyLicense()">تفعيل والولوج الآن 🔓</button>
         </div>
     </div>
 
@@ -85,13 +338,15 @@
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:2px solid var(--primary-red); padding-bottom:8px;">
                 <h3 style="font-size:16px; font-weight:bold;">📋 تفاصيل بيانات زبون الشحنة</h3>
-                <button style="background:none; border:none; color:var(--color-return); font-size:18px; cursor:pointer;" onclick="closeCustomerModal()">✕</button>
+                <button style="background:none; border:none; color:var(--color-return); font-size:20px; cursor:pointer;" onclick="closeCustomerModal()">✕</button>
             </div>
-            <div class="modal-row"><span>رقم الفاتورة:</span><span id="mInvId">-</span></div>
-            <div class="modal-row"><span>اسم الزبون بالكامل:</span><span id="mCustName">-</span></div>
-            <div class="modal-row"><span>رقم هاتف الشحن:</span><span id="mCustPhone">-</span></div>
-            <div class="modal-row"><span>رقم الهاتف الاحتياطي:</span><span id="mCustBackup">-</span></div>
-            <div class="modal-row"><span>عنوان التوصيل / المنطقة:</span><span id="mCustArea">-</span></div>
+            <div class="modal-card-content">
+                <div class="modal-row"><span>رقم الفاتورة:</span><span id="mInvId">-</span></div>
+                <div class="modal-row"><span>اسم الزبون بالكامل:</span><span id="mCustName">-</span></div>
+                <div class="modal-row"><span>رقم هاتف الشحن:</span><span id="mCustPhone">-</span></div>
+                <div class="modal-row"><span>رقم الهاتف الاحتياطي:</span><span id="mCustBackup">-</span></div>
+                <div class="modal-row"><span>عنوان التوصيل / المنطقة:</span><span id="mCustArea">-</span></div>
+            </div>
             <button class="btn" style="width:100%; margin-top:20px; background:var(--bg-input); border:1px solid var(--border-color);" onclick="closeCustomerModal()">إغلاق النافذة</button>
         </div>
     </div>
@@ -104,11 +359,11 @@
             </div>
             <div class="nav-tabs">
                 <button class="tab-btn active" onclick="switchTab('pos-tab', this)">🛒 شاشة البيع</button>
-                <button class="tab-btn" onclick="switchTab('add-product-tab', this)">➕ إدارة المنتجات والمخزن</button>
+                <button class="tab-btn" onclick="switchTab('add-product-tab', this)">➕ إدارة المخزن</button>
                 <button class="tab-btn" onclick="switchTab('inventory-tab', this)">📦 جرد المخزن</button>
                 <button class="tab-btn" onclick="switchTab('reports-tab', this)">📊 الأرباح والتقارير</button>
                 <button class="tab-btn" onclick="switchTab('returns-tab', this)">🔄 المرتجعات</button>
-                <button class="tab-btn" onclick="clearLicenseAndLock()" style="color:var(--primary-red)">🔒 خروج</button>
+                <button class="tab-btn" onclick="clearLicenseAndLock()" style="color:var(--primary-red); flex: 0.5;">🔒 خروج</button>
             </div>
         </header>
 
@@ -118,11 +373,11 @@
                     <div class="card">
                         <div class="card-title">تجهيز الفاتورة الحالية</div>
                         <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                            <div style="flex: 1; min-width: 150px;">
+                            <div style="flex: 1; min-width: 140px;">
                                 <label style="font-size: 11px; color: var(--text-muted);">اضرب الباركود (إن وجد):</label>
                                 <input type="text" id="posBarcodeField" class="input-field" placeholder="اضرب الكود..." onkeypress="handlePosBarcode(event)">
                             </div>
-                            <div style="flex: 1; min-width: 200px;">
+                            <div style="flex: 1.5; min-width: 200px;">
                                 <label style="font-size: 11px; color: var(--text-muted);">أو اختر بلمسة واحدة من الهاتف:</label>
                                 <select id="posSearchSelect" class="input-field" onchange="handlePosSelectName()">
                                     <option value="">🔍 اكتب أو اختر اسم السلعة...</option>
@@ -146,18 +401,18 @@
                     </div>
                     <div class="card">
                         <div class="card-title">الحساب والاعتماد</div>
-                        <div style="background: rgba(255,255,255,0.02); padding: 8px; border-radius: 6px; margin-bottom: 10px; border:1px solid var(--border-color);">
-                            <input type="checkbox" id="checkCustomer" onchange="toggleCustomerView()">
-                            <label for="checkCustomer" style="font-size: 12px; font-weight: bold; cursor: pointer;">إدخال بيانات زبون الشحن والتوصل</label>
+                        <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 12px; border:1px solid var(--border-color);">
+                            <input type="checkbox" id="checkCustomer" onchange="toggleCustomerView()" style="transform: scale(1.2); vertical-align: middle;">
+                            <label for="checkCustomer" style="font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 6px; vertical-align: middle;">إإدخال بيانات زبون الشحن والتوصيل</label>
                             <div class="customer-grid" id="customerBox" style="display: none;">
-                                <input type="text" id="cName" class="input-field" placeholder="اسم الزبون">
-                                <input type="text" id="cPhone" class="input-field" placeholder="رقم الهاتف">
-                                <input type="text" id="cBackup" class="input-field" placeholder="رقم احتياطي">
-                                <input type="text" id="cArea" class="input-field" placeholder="العنوان / المنطقة">
+                                <input type="text" id="cName" class="input-field" placeholder="اسم الزبون بالكامل">
+                                <input type="text" id="cPhone" class="input-field" placeholder="رقم الهاتف الأساسي">
+                                <input type="text" id="cBackup" class="input-field" placeholder="رقم الهاتف الاحتياطي">
+                                <input type="text" id="cArea" class="input-field" placeholder="العنوان / المنطقة بالتفصيل">
                             </div>
                         </div>
-                        <div style="margin-bottom: 10px;">
-                            <label style="font-size: 11px; color: var(--text-muted);">طريقة السداد:</label>
+                        <div style="margin-bottom: 12px;">
+                            <label style="font-size: 11px; color: var(--text-muted);">طريقة السداد المعتمدة:</label>
                             <select id="paymentMethodSelect" class="input-field">
                                 <option value="كاش">💵 كاش (نقدي)</option>
                                 <option value="حوالة مصرفية">🏦 حوالة مصرفية</option>
@@ -165,12 +420,12 @@
                                 <option value="بطاقة تداول">📱 بطاقة تداول</option>
                             </select>
                         </div>
-                        <div class="summary-row"><span>إجمالي المواد:</span><span><span id="posSubtotal">0.00</span> د.ل</span></div>
-                        <div class="summary-row" style="align-items: center;"><span>خصم مباشر (-):</span><input type="number" id="posDiscount" class="input-field" value="0" min="0" style="width: 70px; margin:0; text-align:center;" oninput="sanitizeInputsAndRecalc()"></div>
-                        <div class="summary-row" style="align-items: center;"><span>تكلفة التوصيل (+):</span><input type="number" id="posDelivery" class="input-field" value="0" min="0" style="width: 70px; margin:0; text-align:center;" oninput="sanitizeInputsAndRecalc()"></div>
-                        <div class="summary-row" style="font-size: 16px; font-weight: 900; color: white;"><span>الإجمالي النهائي:</span><span style="color: var(--primary-red);"><span id="posFinalTotal">0.00</span> د.ل</span></div>
-                        <div style="margin-top: 12px;">
-                            <label style="font-size: 11px; color: var(--text-muted);">حالة الطلبية الفورية:</label>
+                        <div class="summary-row"><span>إجمالي المواد الفوري:</span><span><span id="posSubtotal">0.00</span> د.ل</span></div>
+                        <div class="summary-row"><span>خصم مباشر للزبون (-):</span><input type="number" id="posDiscount" class="input-field" value="0" min="0" style="width: 80px; margin:0; text-align:center; padding:6px;" oninput="sanitizeInputsAndRecalc()"></div>
+                        <div class="summary-row"><span>تكلفة التوصيل والشحن (+):</span><input type="number" id="posDelivery" class="input-field" value="0" min="0" style="width: 80px; margin:0; text-align:center; padding:6px;" oninput="sanitizeInputsAndRecalc()"></div>
+                        <div class="summary-row" style="font-size: 18px; font-weight: 900; color: white; padding-top: 15px;"><span>الإجمالي النهائي الكلي:</span><span style="color: var(--primary-red);"><span id="posFinalTotal">0.00</span> د.ل</span></div>
+                        <div style="margin-top: 15px;">
+                            <label style="font-size: 11px; color: var(--text-muted);">حالة الطلبية الفورية المحددة:</label>
                             <div class="status-selectors">
                                 <div id="st-wait" class="status-opt active" style="background:var(--color-wait); color:black;" onclick="setPosStatus('في الانتظار')">في الانتظار</div>
                                 <div id="st-way" class="status-opt" style="background:var(--color-way); color:white;" onclick="setPosStatus('في الطريق')">في الطريق</div>
@@ -178,33 +433,33 @@
                                 <div id="st-ret" class="status-opt" style="background:var(--color-return); color:white;" onclick="setPosStatus('راجع')">راجع</div>
                             </div>
                         </div>
-                        <button class="btn" style="width: 100%; margin-top: 15px; padding: 12px;" onclick="submitPosInvoice()">🚀 حفظ وترحيل الفاتورة لجوجل</button>
-                        <button class="btn" style="width: 100%; margin-top: 8px; background: #2d3142;" onclick="printCurrentInvoiceIsolated()">🖨️ طباعة الفاتورة الفورية</button>
+                        <button class="btn" style="width: 100%; margin-top: 20px; padding: 14px;" onclick="submitPosInvoice()">🚀 حفظ وترحيل الفاتورة لجوجل</button>
+                        <button class="btn" style="width: 100%; margin-top: 10px; background: #2d3142; padding: 12px;" onclick="printCurrentInvoiceIsolated()">🖨️ طباعة الفاتورة الفورية</button>
                     </div>
                 </div>
             </div>
 
             <div id="add-product-tab" class="tab-content">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 15px;">
                     <div class="card">
                         <div class="card-title">➕ إضافة منتج جديد تماماً للمخزن لأول مرة</div>
                         <div style="margin-bottom: 12px;">
                             <label style="font-size: 12px; font-weight: 600;">اسم المنتج التجاري بالكامل:</label>
                             <input type="text" id="newProdName" class="input-field" placeholder="مثال: سماعة هايبركس كلاود 2 سلكية">
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                            <div><label style="font-size: 12px; font-weight: 600;">الكمية المتوفرة:</label><input type="number" id="newProdQty" class="input-field" placeholder="50" min="0"></div>
-                            <div><label style="font-size: 12px; font-weight: 600;">سعر الجملة (التكلفة):</label><input type="number" id="newProdCost" class="input-field" placeholder="10.50" step="0.01"></div>
-                            <div><label style="font-size: 12px; font-weight: 600;">سعر البيع للزبون:</label><input type="number" id="newProdPrice" class="input-field" placeholder="45.00" step="0.01"></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <div><label style="font-size: 11px; font-weight: 600;">الكمية المتوفرة:</label><input type="number" id="newProdQty" class="input-field" placeholder="50" min="0"></div>
+                            <div><label style="font-size: 11px; font-weight: 600;">سعر الجملة:</label><input type="number" id="newProdCost" class="input-field" placeholder="10.50" step="0.01"></div>
+                            <div><label style="font-size: 11px; font-weight: 600;">سعر البيع:</label><input type="number" id="newProdPrice" class="input-field" placeholder="45.00" step="0.01"></div>
                         </div>
                         <div style="margin-bottom: 15px;">
                             <label style="font-size: 12px; font-weight: 600;">كود/باركود السلعة الجديد:</label>
-                            <div style="display: flex; gap: 8px;">
+                            <div style="display: flex; gap: 8px; align-items: center;">
                                 <input type="text" id="newProdBarcode" class="input-field" placeholder="اضرب الكود أو اكتبه...">
-                                <button class="btn" style="background:#2d3142; font-size:11px; padding:0 10px; margin-top:4px;" onclick="generateAutoBarcodeForNewProduct()">توليد تلقائي 🎲</button>
+                                <button class="btn" style="background:#2d3142; font-size:12px; padding:12px 10px; margin-top:4px; white-space:nowrap;" onclick="generateAutoBarcodeForNewProduct()">توليد تلقائي 🎲</button>
                             </div>
                         </div>
-                        <button class="btn" style="width:100%; padding:12px; background:var(--color-success); color:black;" onclick="submitNewProductToGoogle()">📥 حفظ وإدراج كمنتج جديد</button>
+                        <button class="btn" style="width:100%; padding:14px; background:var(--color-success); color:black;" onclick="submitNewProductToGoogle()">📥 حفظ وإدراج كمنتج جديد</button>
                     </div>
                     <div class="card">
                         <div class="card-title">📦 تزويد كمية واردة جديدة لمنتج متوفر مسبقاً</div>
@@ -216,7 +471,7 @@
                             <label style="font-size: 12px; font-weight: 600;">الكمية الجديدة الواردة الحالية (+):</label>
                             <input type="number" id="restockQtyInput" class="input-field" placeholder="مثال: وفرت 20 قطعة جديدة" min="1">
                         </div>
-                        <button class="btn" style="width:100%; padding:12px; background:var(--color-digital); color:black;" onclick="submitRestockQtyToGoogle()">🔄 تحديث وجمع الكمية على الشيت الحالية</button>
+                        <button class="btn" style="width:100%; padding:14px; background:var(--color-digital); color:black;" onclick="submitRestockQtyToGoogle()">🔄 تحديث وجمع الكمية على الشيت الحالية</button>
                     </div>
                 </div>
             </div>
@@ -234,27 +489,30 @@
                 <div class="card">
                     <div class="card-title">🏷️ صانع ملصقات الباركود للطباعة الحرارية</div>
                     <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                        <div style="flex:1; min-width: 200px;">
+                        <div style="flex:1; min-width: 250px;">
                             <input type="text" id="barcodeCanvasInput" class="input-field" placeholder="اكتب الكود هنا لتحويله لملصق...">
-                            <button class="btn" style="margin-top: 10px;" onclick="renderVisualBarcode()">توليد شكل الباركود مرئياً</button>
+                            <button class="btn" style="margin-top: 10px; width: 100%;" onclick="renderVisualBarcode()">توليد شكل الباركود مرئياً</button>
                         </div>
-                        <div style="background: white; padding: 10px; border-radius: 8px; text-align: center; min-width: 150px;">
-                            <svg id="barcodeTargetSvg"></svg>
-                            <br><button class="btn" style="font-size: 11px; padding: 3px 8px; margin-top: 5px; background: #000;" onclick="printSingleBarcodeIsolated()">طباعة ملصق حراري 🖨️</button>
+                        <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; min-width: 180px; margin: 0 auto; border: 1px solid var(--border-color);">
+                            <svg id="barcodeTargetSvg" style="max-width: 100%;"></svg>
+                            <br><button class="btn" style="font-size: 12px; padding: 6px 12px; margin-top: 10px; background: #000; width: 100%;" onclick="printSingleBarcodeIsolated()">طباعة ملصق حراري 🖨️</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="reports-tab" class="tab-content">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px;">
-                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--primary-red);"><p style="font-size:12px; color:var(--text-muted);">إجمالي المبيعات (العامة)</p><h3 id="statSales" style="color:var(--primary-red); font-size:18px; margin-top:5px;">0.00 د.ل</h3></div>
-                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--color-success);"><p style="font-size:12px; color:var(--text-muted);">صافي المكسب الفعلي</p><h3 id="statProfit" style="color:var(--color-success); font-size:18px; margin-top:5px;">0.00 د.ل</h3></div>
-                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--color-cash);"><p style="font-size:12px; color:var(--text-muted);">إجمالي المقبوضات النقدي (كاش)</p><h3 id="statCash" style="color:var(--color-cash) ; font-size:18px; margin-top:5px;">0.00 د.ل</h3></div>
-                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--color-digital);"><p style="font-size:12px; color:var(--text-muted);">إجمالي الحسابات الأخرى (غير النقدي)</p><h3 id="statDigital" style="color:var(--color-digital); font-size:18px; margin-top:5px;">0.00 د.ل</h3></div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 15px;">
+                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--primary-red);"><p style="font-size:12px; color:var(--text-muted);">إجمالي المبيعات (العامة)</p><h3 id="statSales" style="color:var(--primary-red); font-size:20px; margin-top:5px; font-weight: bold;">0.00 د.ل</h3></div>
+                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--color-success);"><p style="font-size:12px; color:var(--text-muted);">صافي المكسب الفعلي</p><h3 id="statProfit" style="color:var(--color-success); font-size:20px; margin-top:5px; font-weight: bold;">0.00 د.ل</h3></div>
+                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--color-cash);"><p style="font-size:12px; color:var(--text-muted);">إجمالي المقبوضات النقدي (كاش)</p><h3 id="statCash" style="color:var(--color-cash) ; font-size:20px; margin-top:5px; font-weight: bold;">0.00 د.ل</h3></div>
+                    <div class="card" style="margin:0; text-align:center; border-right:4px solid var(--color-digital);"><p style="font-size:12px; color:var(--text-muted);">إجمالي الحسابات الأخرى</p><h3 id="statDigital" style="color:var(--color-digital); font-size:20px; margin-top:5px; font-weight: bold;">0.00 د.ل</h3></div>
                 </div>
                 <div class="card">
-                    <div class="card-title"><span>📊 حركات ومبيعات المتجر المعمدة والمسجلة بملف جوجل شيت</span><button class="btn" style="padding: 4px 10px; font-size: 11px;" onclick="syncOrdersOnly()">🔄 تحديث الفواتير السحابية حياً</button></div>
+                    <div class="card-title" style="flex-wrap: wrap; gap: 10px;">
+                        <span>📊 حركات ومبيعات المتجر المعمدة والمسجلة بملف جوجل شيت</span>
+                        <button class="btn" style="padding: 6px 12px; font-size: 12px;" onclick="syncOrdersOnly()">🔄 تحديث الفواتير السحابية حياً</button>
+                    </div>
                     <div class="table-container">
                         <table>
                             <thead><tr><th>رقم الفاتورة</th><th>التاريخ والوقت</th><th>البضاعة المباعة</th><th>القيمة المستلمة</th><th>طريقة الدفع</th><th>الحالة</th><th>الزبون</th></tr></thead>
@@ -267,10 +525,10 @@
             <div id="returns-tab" class="tab-content">
                 <div class="card">
                     <div class="card-title">🔄 معالجة الشحنات المرجوعة من شركة التوصيل</div>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">عند إدخال رقم الفاتورة هنا، ستقوم المنظومة بتعديل حالتها في ملف الجوجل شيت لـ (راجع)، تصفير ربحها، وإعادة إرجاع كميات قطعها إلى المخزن أوتوماتيكياً.</p>
-                    <div style="display: flex; gap: 10px; max-width: 450px; margin-bottom: 15px;">
-                        <input type="text" id="returnInvoiceInput" class="input-field" placeholder="أدخل هنا رقم الفاتورة (مثال: RTG-123456)">
-                        <button class="btn" style="background: var(--color-return);" onclick="processOrderReturnToGoogle()">تأكيد وإرجاع للمخزن والشيت 🔁</button>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6;">عند إدخال رقم الفاتورة هنا، ستقوم المنظومة بتعديل حالتها في ملف الجوجل شيت لـ (راجع)، تصفير ربحها، وإعادة إرجاع كميات قطعها إلى المخزن أوتوماتيكياً لحفظ دقة المخزن والمالية.</p>
+                    <div style="display: flex; gap: 10px; max-width: 500px; flex-wrap: wrap;">
+                        <input type="text" id="returnInvoiceInput" class="input-field" placeholder="أدخل هنا رقم الفاتورة (مثال: RTG-123456)" style="flex: 1; min-width: 200px;">
+                        <button class="btn" style="background: var(--color-return); padding: 12px 20px; width: 100%; max-width: none; flex: 1; min-width: 150px;" onclick="processOrderReturnToGoogle()">تأكيد وإرجاع للمخزن والشيت 🔁</button>
                     </div>
                 </div>
             </div>
@@ -280,7 +538,9 @@
     <div id="toast">تمت العملية بنجاح! 🔔</div>
 
     <script>
+        // السطر 162: هنا يتم لصق رابط الـ Web App المركزي الخاص بك لترخيص وإدارة المتاجر
         const ADMIN_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxK9GGz87EzNCezo_Smm8If_wpVLTZ1UrlE-JDRkPQOwFaQVGkurxM_oj-8WE-BHMNc8Q/exec"; 
+        
         let globalProducts = {}; let cart = []; let selectedStatus = "في الانتظار"; let cloudOrdersHistory = []; 
 
         function verifyLicense() {
@@ -344,7 +604,7 @@
         function removeItem(i) { cart.splice(i, 1); renderCart(); }
         function renderCart() {
             const tbody = document.querySelector('#cartTable tbody'); tbody.innerHTML = '';
-            cart.forEach((item, i) => { tbody.innerHTML += `<tr><td style="font-weight:600;">${item.name}</td><td><input type="number" class="editable-price-input" value="${item.price.toFixed(2)}" oninput="updatePrice(${i}, this.value)"></td><td><input type="number" value="${item.qty}" min="1" style="width:45px; background:var(--bg-input); color:white; border:1px solid var(--border-color); text-align:center;" onchange="updateQty(${i}, this.value)"></td><td style="color:var(--primary-red); font-weight:bold;">${(item.price*item.qty).toFixed(2)}</td><td><button style="background:none; border:none; color:var(--color-return); font-weight:bold; cursor:pointer;" onclick="removeItem(${i})">✕</button></td></tr>`; });
+            cart.forEach((item, i) => { tbody.innerHTML += `<tr><td style="font-weight:600;">${item.name}</td><td><input type="number" class="editable-price-input" value="${item.price.toFixed(2)}" oninput="updatePrice(${i}, this.value)"></td><td><input type="number" value="${item.qty}" min="1" style="width:45px; background:var(--bg-input); color:white; border:1px solid var(--border-color); text-align:center;" onchange="updateQty(${i}, this.value)"></td><td style="color:var(--primary-red); font-weight:bold;">${(item.price*item.qty).toFixed(2)}</td><td><button style="background:none; border:none; color:var(--color-return); font-weight:bold; cursor:pointer; padding: 5px;" onclick="removeItem(${i})">✕</button></td></tr>`; });
             sanitizeInputsAndRecalc();
         }
         function sanitizeInputsAndRecalc() {
