@@ -23,6 +23,16 @@
             --color-success: #00e676;
             --color-return: #ff1744;
         }
+
+        /* 💡 سمات الوضع المضيء */
+        [data-theme="light"] {
+            --bg-main: #f0f2f5;
+            --bg-card: #ffffff;
+            --bg-input: #f7f8fa;
+            --text-light: #1a1d24;
+            --text-muted: #656d7d;
+            --border-color: #dcdfe6;
+        }
         
         * { 
             box-sizing: border-box; 
@@ -39,9 +49,9 @@
             display: flex; 
             flex-direction: column; 
             overflow-x: hidden; 
+            transition: background 0.3s, color 0.3s;
         }
         
-        /* شاشة القفل المتجاوبة */
         #lock-screen { 
             position: fixed; 
             top: 0; 
@@ -73,44 +83,73 @@
             flex-direction: column; 
         }
         
-        /* الهيدر المتجاوب */
         header { 
             background: var(--bg-card); 
             padding: 15px; 
             border-bottom: 2px solid var(--border-color); 
             display: flex; 
-            justify-content: space-between; 
+            flex-direction: column;
             align-items: center; 
-            flex-wrap: wrap; 
             gap: 15px; 
             width: 100%;
         }
         
-        .logo-section {
-            text-align: center;
+        .header-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
         }
-        .logo-section h1 { font-weight: 900; font-size: 22px; white-space: nowrap; }
+
+        .logo-section {
+            text-align: right;
+        }
+        .logo-section h1 { font-weight: 900; font-size: 22px; white-space: nowrap; color: var(--text-light); }
         .logo-section h1 span { color: var(--primary-red); }
         .logo-section p { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
         
-        /* تنسيق القائمة العلوية وحل مشكلة الفراغ في الموبايل */
+        /* 🎛️ زر التبديل بين الوضعين المظلم والمضيء بتصميم عالمي */
+        .theme-toggle-btn {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        /* 🔄 تحويل القائمة العلوية لبكرة متطورة لمنع الفراغ الجانبي نهائياً */
+        .nav-tabs-container {
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none; /* إخفاء في فايرفوكس */
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav-tabs-container::-webkit-scrollbar {
+            display: none; /* إخفاء في كروم وسفاري */
+        }
+
         .nav-tabs { 
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* توزيع متساوي تماماً لحجم الأزرار */
+            display: flex;
             gap: 8px; 
             background: var(--bg-main); 
-            padding: 8px; 
+            padding: 6px; 
             border-radius: 10px; 
-            width: 100%;
-            margin: 0;
+            width: max-content;
+            min-width: 100%;
         }
         
         .tab-btn { 
             background: none; 
             border: none; 
             color: var(--text-muted); 
-            padding: 12px 10px; 
+            padding: 10px 16px; 
             border-radius: 8px; 
             cursor: pointer; 
             font-weight: 700; 
@@ -118,7 +157,7 @@
             transition: 0.2s; 
             text-align: center;
             white-space: nowrap;
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: var(--bg-card);
             border: 1px solid var(--border-color);
         }
         
@@ -157,7 +196,6 @@
             align-items: center; 
         }
         
-        /* تقسيم شاشة البيع - افتراضي لشاشات العرض الكبيرة */
         .grid-pos { 
             display: grid; 
             grid-template-columns: 1.6fr 1.4fr; 
@@ -169,7 +207,7 @@
             width: 100%; 
             background: var(--bg-input); 
             border: 1px solid var(--border-color); 
-            color: white; 
+            color: var(--text-light); 
             padding: 12px 10px; 
             border-radius: 8px; 
             font-size: 14px; 
@@ -197,7 +235,6 @@
         
         .btn:hover { background: var(--primary-red-hover); }
         
-        /* الجداول المتجاوبة وسهلة اللمس */
         .table-container { 
             width: 100%; 
             overflow-x: auto; 
@@ -209,7 +246,7 @@
         
         table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; min-width: 500px; }
         th { background: var(--bg-input); color: var(--text-muted); padding: 12px 10px; font-weight: 600; }
-        td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); vertical-align: middle; color: var(--text-light); }
         
         .customer-grid { 
             display: grid; 
@@ -227,7 +264,6 @@
             align-items: center;
         }
         
-        /* أزرار الحالات المتجاوبة جداً للموبايل */
         .status-selectors { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
@@ -247,7 +283,7 @@
             transition: 0.2s;
         }
         
-        .status-opt.active { opacity: 1; border: 1px solid white; }
+        .status-opt.active { opacity: 1; border: 1px solid var(--text-light); }
         .stock-badge { padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         .stock-danger { background: rgba(255, 23, 72, 0.2); color: var(--color-return); }
         .stock-safe { background: rgba(0, 230, 118, 0.2); color: var(--color-success); }
@@ -275,14 +311,13 @@
             width: 80px; 
             background: var(--bg-main); 
             border: 1px solid var(--border-color); 
-            color: white; 
+            color: var(--text-light); 
             padding: 6px; 
             text-align: center; 
             border-radius: 4px; 
             font-size: 13px;
         }
         
-        /* النوافذ المنبثقة المتجاوبة */
         .modal-overlay { 
             position: fixed; 
             top: 0; 
@@ -309,36 +344,19 @@
         
         .modal-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
         .modal-row span:first-child { color: var(--text-muted); font-weight: 600; }
-        .modal-row span:last-child { color: white; font-weight: bold; }
+        .modal-row span:last-child { color: var(--text-light); font-weight: bold; }
         
         .btn-small { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-light); padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
         .btn-small:hover { background: var(--primary-red); color: white; }
 
-        /* 📱 تحسينات الشاشات المتوسطة والصغيرة لمنع الفراغات بالكامل */
         @media (max-width: 1024px) {
             .grid-pos { grid-template-columns: 1fr; }
-            header { justify-content: center; text-align: center; }
-            .nav-tabs { 
-                grid-template-columns: repeat(3, 1fr); /* 3 أزرار في كل صف لتتوزع بالتساوي الكلي وتغلق الفراغ الجانبي */
-                width: 100%; 
-            }
         }
         
         @media (max-width: 600px) {
-            .nav-tabs { 
-                grid-template-columns: repeat(2, 1fr); /* زرين في كل صف لتغطية كامل عرض شاشة الموبايل بالتفصيل وبأناقة */
-            }
-            /* جعل زر الخروج يأخذ صفاً كاملاً في النهاية ليصبح متناسقاً ولا يترك فراغاً فردياً */
-            .nav-tabs button:last-child {
-                grid-column: span 2;
-                color: var(--primary-red);
-                background-color: rgba(255, 30, 66, 0.05);
-                border-color: rgba(255, 30, 66, 0.2);
-            }
             .customer-grid { grid-template-columns: 1fr; }
             .status-selectors { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .status-opt { padding: 12px; font-size: 13px; }
-            .tab-btn { padding: 12px 8px; font-size: 12px; }
             td, th { padding: 10px 6px; font-size: 12px; }
             .editable-price-input { width: 65px; padding: 4px; }
         }
@@ -348,10 +366,10 @@
 
     <div id="lock-screen">
         <div class="lock-card">
-            <h2 style="font-weight: 900; margin-bottom: 5px; font-size: 24px;">RTG <span>Saas POS</span></h2>
-            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 25px;">منظومة إدارة المبيعات والمخازن السحابية الذكية للمتاجر</p>
+            <h2 style="font-weight: 900; margin-bottom: 5px; font-size: 24px; color: white;">RTG <span>Saas POS</span></h2>
+            <p style="color: #828a9e; font-size: 12px; margin-bottom: 25px;">منظومة إدارة المبيعات والمخازن السحابية الذكية للمتاجر</p>
             <div id="lock-msg" style="margin-bottom: 15px; color: var(--primary-red); font-weight: bold; font-size: 13px;">يرجى تفعيل رخصة المنظومة للولوج والبدء</div>
-            <input type="text" id="licenseKeyField" class="input-field" placeholder="أدخل كود التفعيل السحابي..." style="text-align: center; letter-spacing: 2px; margin-bottom: 15px;">
+            <input type="text" id="licenseKeyField" class="input-field" placeholder="أدخل كود التفعيل السحابي..." style="text-align: center; letter-spacing: 2px; margin-bottom: 15px; color: white;">
             <button class="btn" style="width: 100%; padding: 14px;" onclick="verifyLicense()">تفعيل والولوج الآن 🔓</button>
         </div>
     </div>
@@ -375,17 +393,25 @@
 
     <div class="app-wrapper" id="appMainWrapper">
         <header>
-            <div class="logo-section">
-                <h1 id="shopTitleHeader">RTG-GEARX <span>POS</span></h1>
-                <p>نظام البيع السريع وجرد المخازن للمشتركين</p>
+            <div class="header-top-bar">
+                <div class="logo-section">
+                    <h1 id="shopTitleHeader">RTG-GEARX <span>POS</span></h1>
+                    <p>نظام البيع السريع وجرد المخازن للمشتركين</p>
+                </div>
+                <button class="theme-toggle-btn" onclick="toggleTheme()">
+                    <span id="theme-icon">☀️</span> <span id="theme-text">الوضع المضيء</span>
+                </button>
             </div>
-            <div class="nav-tabs">
-                <button class="tab-btn active" onclick="switchTab('pos-tab', this)">🛒 شاشة البيع</button>
-                <button class="tab-btn" onclick="switchTab('add-product-tab', this)">➕ إدارة المخزن</button>
-                <button class="tab-btn" onclick="switchTab('inventory-tab', this)">📦 جرد المخزن</button>
-                <button class="tab-btn" onclick="switchTab('reports-tab', this)">📊 الأرباح والتقارير</button>
-                <button class="tab-btn" onclick="switchTab('returns-tab', this)">🔄 المرتجعات</button>
-                <button class="tab-btn" onclick="clearLicenseAndLock()">🔒 خروج</button>
+            
+            <div class="nav-tabs-container">
+                <div class="nav-tabs">
+                    <button class="tab-btn active" onclick="switchTab('pos-tab', this)">🛒 شاشة البيع</button>
+                    <button class="tab-btn" onclick="switchTab('add-product-tab', this)">➕ إدارة المخزن</button>
+                    <button class="tab-btn" onclick="switchTab('inventory-tab', this)">📦 جرد المخزن</button>
+                    <button class="tab-btn" onclick="switchTab('reports-tab', this)">📊 الأرباح والتقارير</button>
+                    <button class="tab-btn" onclick="switchTab('returns-tab', this)">🔄 المرتجعات</button>
+                    <button class="tab-btn" style="color:var(--primary-red);" onclick="clearLicenseAndLock()">🔒 خروج</button>
+                </div>
             </div>
         </header>
 
@@ -445,7 +471,7 @@
                         <div class="summary-row"><span>إجمالي المواد الفوري:</span><span><span id="posSubtotal">0.00</span> د.ل</span></div>
                         <div class="summary-row"><span>خصم مباشر للزبون (-):</span><input type="number" id="posDiscount" class="input-field" value="0" min="0" style="width: 80px; margin:0; text-align:center; padding:6px;" oninput="sanitizeInputsAndRecalc()"></div>
                         <div class="summary-row"><span>تكلفة التوصيل والشحن (+):</span><input type="number" id="posDelivery" class="input-field" value="0" min="0" style="width: 80px; margin:0; text-align:center; padding:6px;" oninput="sanitizeInputsAndRecalc()"></div>
-                        <div class="summary-row" style="font-size: 18px; font-weight: 900; color: white; padding-top: 15px;"><span>الإجمالي النهائي الكلي:</span><span style="color: var(--primary-red);"><span id="posFinalTotal">0.00</span> د.ل</span></div>
+                        <div class="summary-row" style="font-size: 18px; font-weight: 900;"><span>الإجمالي النهائي الكلي:</span><span style="color: var(--primary-red);"><span id="posFinalTotal">0.00</span> د.ل</span></div>
                         <div style="margin-top: 15px;">
                             <label style="font-size: 11px; color: var(--text-muted);">حالة الطلبية الفورية المحددة:</label>
                             <div class="status-selectors">
@@ -467,17 +493,17 @@
                         <div class="card-title">➕ إضافة منتج جديد تماماً للمخزن لأول مرة</div>
                         <div style="margin-bottom: 12px;">
                             <label style="font-size: 12px; font-weight: 600;">اسم المنتج التجاري بالكامل:</label>
-                            <input type="text" id="newProdName" class="input-field" placeholder="مثال: سماعة هايبركس كلاود 2 سلكية">
+                            <input type="text" id="newProdName" class="input-field" placeholder="مثال: سماعة هايبركس كلاود 2">
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px;">
-                            <div><label style="font-size: 11px; font-weight: 600;">الكمية المتوفرة:</label><input type="number" id="newProdQty" class="input-field" placeholder="50" min="0"></div>
+                            <div><label style="font-size: 11px; font-weight: 600;">الكمية:</label><input type="number" id="newProdQty" class="input-field" placeholder="50" min="0"></div>
                             <div><label style="font-size: 11px; font-weight: 600;">سعر الجملة:</label><input type="number" id="newProdCost" class="input-field" placeholder="10.50" step="0.01"></div>
                             <div><label style="font-size: 11px; font-weight: 600;">سعر البيع:</label><input type="number" id="newProdPrice" class="input-field" placeholder="45.00" step="0.01"></div>
                         </div>
                         <div style="margin-bottom: 15px;">
                             <label style="font-size: 12px; font-weight: 600;">كود/باركود السلعة الجديد:</label>
                             <div style="display: flex; gap: 8px; align-items: center;">
-                                <input type="text" id="newProdBarcode" class="input-field" placeholder="اضرب الكود أو اكتبه...">
+                                <input type="text" id="newProdBarcode" class="input-field" placeholder="اضرب الكود...">
                                 <button class="btn" style="background:#2d3142; font-size:12px; padding:12px 10px; margin-top:4px; white-space:nowrap;" onclick="generateAutoBarcodeForNewProduct()">توليد تلقائي 🎲</button>
                             </div>
                         </div>
@@ -487,11 +513,11 @@
                         <div class="card-title">📦 تزويد كمية واردة جديدة لمنتج متوفر مسبقاً</div>
                         <div style="margin-bottom: 15px;">
                             <label style="font-size: 12px; font-weight: 600;">ابحث واختر السلعة المراد تزويدها:</label>
-                            <select id="restockSelectProduct" class="input-field"><option value="">🔍 اختر السلعة المراد تزويد كميتها...</option></select>
+                            <select id="restockSelectProduct" class="input-field"><option value="">🔍 اختر السلعة...</option></select>
                         </div>
                         <div style="margin-bottom: 20px;">
                             <label style="font-size: 12px; font-weight: 600;">الكمية الجديدة الواردة الحالية (+):</label>
-                            <input type="number" id="restockQtyInput" class="input-field" placeholder="مثال: وفرت 20 قطعة جديدة" min="1">
+                            <input type="number" id="restockQtyInput" class="input-field" placeholder="مثال: وفرت 20 قطعة" min="1">
                         </div>
                         <button class="btn" style="width:100%; padding:14px; background:var(--color-digital); color:black;" onclick="submitRestockQtyToGoogle()">🔄 تحديث وجمع الكمية على الشيت الحالية</button>
                     </div>
@@ -517,7 +543,7 @@
                         </div>
                         <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; min-width: 180px; margin: 0 auto; border: 1px solid var(--border-color);">
                             <svg id="barcodeTargetSvg" style="max-width: 100%;"></svg>
-                            <br><button class="btn" style="font-size: 12px; padding: 6px 12px; margin-top: 10px; background: #000; width: 100%;" onclick="printSingleBarcodeIsolated()">طباعة ملصق حراري 🖨️</button>
+                            <br><button class="btn" style="font-size: 12px; padding: 6px 12px; margin-top: 10px; background: #000; width: 100%; color: white;" onclick="printSingleBarcodeIsolated()">طباعة ملصق حراري 🖨️</button>
                         </div>
                     </div>
                 </div>
@@ -564,6 +590,33 @@
         
         let globalProducts = {}; let cart = []; let selectedStatus = "في الانتظار"; let cloudOrdersHistory = []; 
 
+        // 🌓 دالة تبديل الثيم المظلم والمضيء وحفظ الإعدادات في المتصفح
+        function initTheme() {
+            const savedTheme = localStorage.getItem('rtg_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButtonUi(savedTheme);
+        }
+        
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('rtg_theme', newTheme);
+            updateThemeButtonUi(newTheme);
+        }
+
+        function updateThemeButtonUi(theme) {
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (theme === 'light') {
+                icon.innerText = "🌙";
+                text.innerText = "الوضع المظلم";
+            } else {
+                icon.innerText = "☀️";
+                text.innerText = "الوضع المضيء";
+            }
+        }
+
         function verifyLicense() {
             const key = document.getElementById('licenseKeyField').value.trim();
             if (!key) { alert("يرجى إدخال كود التفعيل أولاً!"); return; }
@@ -577,140 +630,357 @@
             };
             const s = document.createElement('script'); s.id = 'license-check-engine'; s.src = `${ADMIN_SCRIPT_URL}?action=checkLicense&key=${key}&callback=handleLicenseResponse`; document.body.appendChild(s);
         }
+
         function checkOnLoad() {
+            initTheme(); // تشغيل الثيم الفوري
             const saved = localStorage.getItem('rtg_license');
-            if(saved) { document.getElementById('lock-screen').style.display = 'none'; document.getElementById('appMainWrapper').style.display = 'flex'; initSystem(); } 
-            else { document.getElementById('lock-screen').style.display = 'flex'; document.getElementById('appMainWrapper').style.display = 'none'; }
+            if(saved) { 
+                document.getElementById('lock-screen').style.display = 'none'; 
+                document.getElementById('appMainWrapper').style.display = 'flex'; 
+                initSystem(); 
+            } else { 
+                document.getElementById('lock-screen').style.display = 'flex'; 
+                document.getElementById('appMainWrapper').style.display = 'none'; 
+            }
         }
-        function clearLicenseAndLock() { localStorage.clear(); window.location.reload(); }
-        function switchTab(id, btn) { document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
+
+        function clearLicenseAndLock() {
+            if(confirm("هل أنت متأكد من تسجيل الخروج وقفل المنظومة؟")) {
+                localStorage.removeItem('rtg_license'); localStorage.removeItem('rtg_script_url'); localStorage.removeItem('rtg_shop_title');
+                location.reload();
+            }
+        }
+
+        function getActiveStoreUrl() { return localStorage.getItem('rtg_script_url'); }
+
         function initSystem() {
-            const url = localStorage.getItem('rtg_script_url'); const title = localStorage.getItem('rtg_shop_title');
+            const title = localStorage.getItem('rtg_shop_title');
             if(title) document.getElementById('shopTitleHeader').innerHTML = `${title} <span>POS</span>`;
-            if(url) { syncProducts(url); syncOrdersOnly(); }
+            syncProductsData(); syncOrdersOnly();
         }
-        function syncProducts(url) {
-            const old = document.getElementById('jsonp-engine'); if(old) old.remove();
-            window.handleSpreadsheetResponse = function(data) {
-                globalProducts = data;
-                const select = document.getElementById('posSearchSelect'); select.innerHTML = '<option value="">🔍 اكتب أو اختر اسم السلعة...</option>';
-                const restockSelect = document.getElementById('restockSelectProduct'); restockSelect.innerHTML = '<option value="">🔍 اختر السلعة المراد تزويد كميتها...</option>';
-                const invBody = document.getElementById('inventoryTableBody'); invBody.innerHTML = '';
-                for(let b in globalProducts) {
-                    let p = globalProducts[b]; let displayCost = (parseFloat(p.cost) || 0).toFixed(2); let displayPrice = (parseFloat(p.price) || 0).toFixed(2);
-                    select.innerHTML += `<option value="${b}">${p.name}</option>`; restockSelect.innerHTML += `<option value="${b}">${p.name} [كود: ${b}]</option>`;
-                    let realQty = parseFloat(p.qty) || 0; let badge = realQty <= 3 ? '<span class="stock-badge stock-danger">وشك النفاذ 🚨</span>' : '<span class="stock-badge stock-safe">متوفر</span>';
-                    invBody.innerHTML += `<tr><td>${b}</td><td style="font-weight:600;">${p.name}</td><td style="font-weight:bold; color:var(--color-digital);">${realQty} قطعة</td><td>${displayCost} d.ل</td><td style="color:var(--primary-red); font-weight:bold;">${displayPrice} د.ل</td><td>${badge}</td></tr>`;
-                }
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 3500);
+        }
+
+        function syncProductsData() {
+            const url = getActiveStoreUrl(); if(!url) return;
+            const old = document.getElementById('prod-sync-script'); if(old) old.remove();
+            window.handleProductsData = function(data) {
+                globalProducts = data; buildPosSelectMenu(); buildInventoryTable(); buildRestockSelectMenu();
             };
-            const s = document.createElement('script'); s.id = 'jsonp-engine'; s.src = `${url}?action=getProducts&callback=handleSpreadsheetResponse`; document.body.appendChild(s);
+            const s = document.createElement('script'); s.id = 'prod-sync-script'; s.src = `${url}?action=getProducts&callback=handleProductsData`; document.body.appendChild(s);
         }
+
+        function buildPosSelectMenu() {
+            const sel = document.getElementById('posSearchSelect'); sel.innerHTML = '<option value="">🔍 اكتب أو اختر اسم السلعة...</option>';
+            for (let code in globalProducts) {
+                let p = globalProducts[code];
+                let opt = document.createElement('option'); opt.value = code; opt.innerText = `${p.name} (متاح: ${p.qty} | سعر: ${p.price} د.ل)`;
+                sel.appendChild(opt);
+            }
+        }
+
+        function buildRestockSelectMenu() {
+            const sel = document.getElementById('restockSelectProduct'); sel.innerHTML = '<option value="">🔍 اختر السلعة المراد تزويد كميتها...</option>';
+            for (let code in globalProducts) {
+                let opt = document.createElement('option'); opt.value = code; opt.innerText = globalProducts[code].name;
+                sel.appendChild(opt);
+            }
+        }
+
+        function buildInventoryTable() {
+            const tbody = document.getElementById('inventoryTableBody'); tbody.innerHTML = "";
+            for (let code in globalProducts) {
+                let p = globalProducts[code];
+                let badge = p.qty <= 3 ? `<span class="stock-badge stock-danger">منخفض ⚠️</span>` : `<span class="stock-badge stock-safe">آمن ✅</span>`;
+                let row = `<tr>
+                    <td><b>${code}</b></td>
+                    <td>${p.name}</td>
+                    <td><mark style="padding:2px 6px; font-weight:bold; border-radius:4px;">${p.qty}</mark></td>
+                    <td>${p.cost.toFixed(2)} د.ل</td>
+                    <td>${p.price.toFixed(2)} د.ل</td>
+                    <td>${badge}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            }
+        }
+
         function syncOrdersOnly() {
-            const url = localStorage.getItem('rtg_script_url'); if(!url) return;
-            const old = document.getElementById('jsonp-orders-engine'); if(old) old.remove();
-            window.handleOrdersResponse = function(data) { cloudOrdersHistory = data; renderReports(); showToast("تم مزامنة وسحب كافة الفواتير من السحابة بنجاح! 📊"); };
-            const s = document.createElement('script'); s.id = 'jsonp-orders-engine'; s.src = `${url}?action=getOrders&callback=handleOrdersResponse`; document.body.appendChild(s);
-        }
-        function handlePosBarcode(e) { if(e.key === 'Enter') { let code = document.getElementById('posBarcodeField').value.trim(); if(code) { addToCart(code); document.getElementById('posBarcodeField').value = ''; } } }
-        function handlePosSelectName() { let code = document.getElementById('posSearchSelect').value; if(code) { addToCart(code); document.getElementById('posSearchSelect').value = ''; } }
-        function addToCart(code) {
-            if(!globalProducts[code]) { alert("الكود غير مسجل بالمخزن!"); return; }
-            let p = globalProducts[code]; let exist = cart.find(x => x.code === code); let neededQty = exist ? exist.qty + 1 : 1;
-            if (neededQty > (parseFloat(p.qty) || 0)) { alert(`⚠️ عذراً! المخزون المتاح لا يكفي (المتوفر بالشيت: ${p.qty} قطع فقط)`); return; }
-            if(exist) { exist.qty++; } else { cart.push({ code: code, name: p.name, cost: parseFloat(p.cost)||0, price: parseFloat(p.price)||0, qty: 1 }); }
-            renderCart();
-        }
-        function updatePrice(i, v) { let price = parseFloat(v); if(!isNaN(price) && price>=0) { cart[i].price = price; recalcTotals(); } }
-        function updateQty(i, v) { let qty = parseInt(v); if(qty>0) { let p = globalProducts[cart[i].code]; if (qty > (parseFloat(p.qty) || 0)) { alert("الكمية المطلوبة تتجاوز المتاح بالمخزن!"); return; } cart[i].qty = qty; renderCart(); } }
-        function removeItem(i) { cart.splice(i, 1); renderCart(); }
-        function renderCart() {
-            const tbody = document.querySelector('#cartTable tbody'); tbody.innerHTML = '';
-            cart.forEach((item, i) => { tbody.innerHTML += `<tr><td style="font-weight:600;">${item.name}</td><td><input type="number" class="editable-price-input" value="${item.price.toFixed(2)}" oninput="updatePrice(${i}, this.value)"></td><td><input type="number" value="${item.qty}" min="1" style="width:45px; background:var(--bg-input); color:white; border:1px solid var(--border-color); text-align:center;" onchange="updateQty(${i}, this.value)"></td><td style="color:var(--primary-red); font-weight:bold;">${(item.price*item.qty).toFixed(2)}</td><td><button style="background:none; border:none; color:var(--color-return); font-weight:bold; cursor:pointer; padding: 5px;" onclick="removeItem(${i})">✕</button></td></tr>`; });
-            sanitizeInputsAndRecalc();
-        }
-        function sanitizeInputsAndRecalc() {
-            let discInput = document.getElementById('posDiscount'); let delInput = document.getElementById('posDelivery');
-            if (parseFloat(discInput.value) < 0 || discInput.value === "") discInput.value = 0; if (parseFloat(delInput.value) < 0 || delInput.value === "") delInput.value = 0;
-            recalcTotals();
-        }
-        function recalcTotals() {
-            let sub = 0; cart.forEach(x => sub += (x.price * x.qty)); let disc = parseFloat(document.getElementById('posDiscount').value)||0; let del = parseFloat(document.getElementById('posDelivery').value)||0; let final = (sub - disc) + del;
-            document.getElementById('posSubtotal').innerText = sub.toFixed(2); document.getElementById('posFinalTotal').innerText = final < 0 ? "0.00" : final.toFixed(2);
-        }
-        function setPosStatus(st) {
-            selectedStatus = st; document.querySelectorAll('.status-opt').forEach(x => x.classList.remove('active'));
-            if(st==='في الانتظار') document.getElementById('st-wait').classList.add('active'); if(st==='في الطريق') document.getElementById('st-way').classList.add('active'); if(st==='تم الاستلام') document.getElementById('st-done').classList.add('active'); if(st==='راجع') document.getElementById('st-ret').classList.add('active');
-        }
-        function toggleCustomerView() { document.getElementById('customerBox').style.display = document.getElementById('checkCustomer').checked ? 'grid' : 'none'; }
-        function submitPosInvoice() {
-            const url = localStorage.getItem('rtg_script_url'); if(!url || cart.length === 0) { alert("السلة فارغة!"); return; }
-            const invId = "RTG-" + Math.floor(100000 + Math.random() * 900000); const dateStr = new Date().toLocaleString('ar-LY'); const itemsText = cart.map(x => `${x.name} (${x.qty} قطع)`).join(' | ');
-            let sales = 0; let cost = 0; cart.forEach(x => { sales += (x.price*x.qty); cost += (x.cost*x.qty); });
-            let disc = parseFloat(document.getElementById('posDiscount').value)||0; let del = parseFloat(document.getElementById('posDelivery').value)||0;
-            let finalVal = (sales - disc) + del; let profit = sales - cost - disc; const isCust = document.getElementById('checkCustomer').checked; const method = document.getElementById('paymentMethodSelect').value;
-            const payload = {
-                action: "addOrder", invoiceId: invId, date: dateStr, productsList: itemsText, totalSales: finalVal.toFixed(2), netProfit: selectedStatus==='راجع'? 0 : profit.toFixed(2), deliveryFee: del.toFixed(2), orderStatus: selectedStatus, cartItems: cart.map(x => ({ code: x.code, qty: x.qty })),
-                customerName: isCust ? document.getElementById('cName').value.trim() : "غير محدد", customerPhone: isCust ? document.getElementById('cPhone').value.trim() : "غير محدد", customerBackupPhone: isCust ? document.getElementById('cBackup').value.trim() : "غير محدد", customerArea: isCust ? document.getElementById('cArea').value.trim() : "غير محدد", method: method
+            const url = getActiveStoreUrl(); if(!url) return;
+            document.getElementById('reportsTableBody').innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">جاري مزامنة وسحب الفواتير الحية... 🔄</td></tr>`;
+            const old = document.getElementById('orders-sync-script'); if(old) old.remove();
+            window.handleOrdersData = function(data) {
+                cloudOrdersHistory = data; buildReportsUi();
             };
-            showToast("⏳ جاري تسجيل وتعديل كميات المخزن سحابياً...");
-            fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-            .then(() => {
-                showToast(`🚀 تم الحفظ والترحيل السحابي: ${invId}`); cart = []; renderCart(); document.getElementById('posDiscount').value = '0'; document.getElementById('posDelivery').value = '0';
-                if(isCust) { document.getElementById('cName').value=''; document.getElementById('cPhone').value=''; document.getElementById('cBackup').value=''; document.getElementById('cArea').value=''; document.getElementById('checkCustomer').checked=false; toggleCustomerView(); }
-                setPosStatus('في الانتظار'); syncProducts(url); setTimeout(syncOrdersOnly, 1500); 
-            });
+            const s = document.createElement('script'); s.id = 'orders-sync-script'; s.src = `${url}?action=getOrders&callback=handleOrdersData`; document.body.appendChild(s);
         }
-        function openCustomerModal(index) {
-            let order = cloudOrdersHistory[index]; if(!order) return;
-            document.getElementById('mInvId').innerText = order.id; document.getElementById('mCustName').innerText = order.cName || "غير محدد"; document.getElementById('mCustPhone').innerText = order.cPhone || "غير محدد"; document.getElementById('mCustBackup').innerText = order.cBackup || "غير محدد"; document.getElementById('mCustArea').innerText = order.cArea || "غير محدد";
-            document.getElementById('customerModal').style.display = 'flex';
+
+        function buildReportsUi() {
+            let totalSales = 0; let totalProfit = 0; let totalCash = 0; let totalDigital = 0;
+            const tbody = document.getElementById('reportsTableBody'); tbody.innerHTML = "";
+            
+            if(cloudOrdersHistory.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">لا توجد أي فواتير مسجلة حالياً بالشيت.</td></tr>`;
+                return;
+            }
+
+            cloudOrdersHistory.forEach(o => {
+                if (o.status !== "راجع") {
+                    totalSales += o.total; totalProfit += o.profit;
+                    if(o.method === "كاش") totalCash += o.total; else totalDigital += o.total;
+                }
+                let stColor = "var(--color-wait)";
+                if(o.status === "في الطريق") stColor = "var(--color-way)";
+                if(o.status === "تم الاستلام") stColor = "var(--color-success)";
+                if(o.status === "راجع") stColor = "var(--color-return)";
+
+                let custBtn = o.cName !== "غير محدد" ? `<button class="btn-small" onclick="openCustomerModal('${o.id}','${o.cName}','${o.cPhone}','${o.cBackup}','${o.cArea}')">👤 عرض</button>` : `<span style="color:var(--text-muted); font-size:11px;">مباشر</span>`;
+
+                let row = `<tr>
+                    <td><span style="font-weight:bold; color:var(--primary-red);">${o.id}</span></td>
+                    <td style="font-size:11px; color:var(--text-muted);">${o.date}</td>
+                    <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.desc}">${o.desc}</td>
+                    <td><b>${o.total.toFixed(2)} د.ل</b></td>
+                    <td><span style="font-size:11px; font-weight:bold;">${o.method}</span></td>
+                    <td><span style="color:${stColor}; font-weight:bold;">${o.status}</span></td>
+                    <td>${custBtn}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+
+            document.getElementById('statSales').innerText = totalSales.toFixed(2) + " د.ل";
+            document.getElementById('statProfit').innerText = totalProfit.toFixed(2) + " د.ل";
+            document.getElementById('statCash').innerText = totalCash.toFixed(2) + " د.ل";
+            document.getElementById('statDigital').innerText = totalDigital.toFixed(2) + " د.ل";
+        }
+
+        function openCustomerModal(id, name, phone, backup, area) {
+            document.getElementById('mInvId').innerText = id; document.getElementById('mCustName').innerText = name;
+            document.getElementById('mCustPhone').innerText = phone; document.getElementById('mCustBackup').innerText = backup;
+            document.getElementById('mCustArea').innerText = area; document.getElementById('customerModal').style.display = 'flex';
         }
         function closeCustomerModal() { document.getElementById('customerModal').style.display = 'none'; }
-        function renderReports() {
-            let sSum=0; let pSum=0; let cSum=0; let dSum=0; const tbody = document.getElementById('reportsTableBody'); tbody.innerHTML = '';
-            if(cloudOrdersHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">لا توجد فواتير مسجلة في شيت الطلبيات حالياً.</td></tr>'; return; }
-            cloudOrdersHistory.forEach((inv, index) => {
-                if(inv.status !== 'راجع') { sSum += inv.total; pSum += inv.profit; if(inv.method === 'كاش') cSum += inv.total; else dSum += inv.total; }
-                let methodColor = 'var(--color-digital)'; if(inv.method === 'كاش') methodColor = 'var(--color-cash)'; if(inv.method === 'حوالة مصرفية') methodColor = '#e040fb'; if(inv.method === 'بطاقة تداول') methodColor = '#ffeb3b';
-                tbody.innerHTML += `<tr><td style="font-weight:bold;">${inv.id}</td><td>${inv.date}</td><td style="font-size:11px; max-width:250px; color:var(--text-muted);">${inv.desc}</td><td style="color:var(--primary-red); font-weight:bold;">${inv.total.toFixed(2)}</td><td><span style="color:${methodColor}; font-weight:600;">${inv.method}</span></td><td><span style="color:${inv.status==='تم الاستلام'?'var(--color-success)':inv.status==='راجع'?'var(--color-return)':'var(--color-wait)'}; font-weight:bold;">${inv.status}</span></td><td><button class="btn-small" onclick="openCustomerModal(${index})">📋 عرض البيانات</button></td></tr>`;
+
+        function handlePosBarcode(e) {
+            if (e.key === 'Enter') {
+                let code = document.getElementById('posBarcodeField').value.trim();
+                if(code) { addItemToCart(code); document.getElementById('posBarcodeField').value = ""; }
+            }
+        }
+        function handlePosSelectName() {
+            let code = document.getElementById('posSearchSelect').value;
+            if(code) { addItemToCart(code); document.getElementById('posSearchSelect').value = ""; }
+        }
+
+        function addItemToCart(code) {
+            let p = globalProducts[code];
+            if (!p) { alert("⚠️ عذراً، هذا الكود/الباركود غير معرف بالمخزن!"); return; }
+            let existing = cart.find(item => item.code === code);
+            if (existing) { existing.qty++; } else { cart.push({ code: code, name: p.name, price: p.price, cost: p.cost, qty: 1 }); }
+            renderCart();
+        }
+
+        function deleteCartItem(index) { cart.splice(index, 1); renderCart(); }
+
+        function updateCartItemPrice(index, val) {
+            let parsed = parseFloat(val) || 0;
+            cart[index].price = parsed; sanitizeInputsAndRecalc();
+        }
+        function updateCartItemQty(index, val) {
+            let parsed = parseFloat(val) || 1;
+            cart[index].qty = parsed; sanitizeInputsAndRecalc();
+        }
+
+        function renderCart() {
+            const tbody = document.querySelector('#cartTable tbody'); tbody.innerHTML = "";
+            cart.forEach((item, idx) => {
+                let total = item.price * item.qty;
+                let row = `<tr>
+                    <td><b>${item.name}</b></td>
+                    <td><input type="number" class="editable-price-input" value="${item.price}" step="0.5" oninput="updateCartItemPrice(${idx}, this.value)"></td>
+                    <td><input type="number" class="editable-price-input" value="${item.qty}" min="1" style="width:55px;" oninput="updateCartItemQty(${idx}, this.value)"></td>
+                    <td><span style="font-weight:bold;">${total.toFixed(2)}</span> د.ل</td>
+                    <td><button style="background:none; border:none; color:var(--color-return); font-size:16px; cursor:pointer;" onclick="deleteCartItem(${idx})">🗑️</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
             });
-            document.getElementById('statSales').innerText = sSum.toFixed(2) + " د.ل"; document.getElementById('statProfit').innerText = pSum.toFixed(2) + " د.ل"; document.getElementById('statCash').innerText = cSum.toFixed(2) + " د.ل"; document.getElementById('statDigital').innerText = dSum.toFixed(2) + " د.ل";
+            sanitizeInputsAndRecalc();
         }
-        function generateAutoBarcodeForNewProduct() { document.getElementById('newProdBarcode').value = "PROD-" + Math.floor(100000 + Math.random() * 900000); }
-        function submitNewProductToGoogle() {
-            const url = localStorage.getItem('rtg_script_url'); const name = document.getElementById('newProdName').value.trim(); const qty = parseInt(document.getElementById('newProdQty').value); const cost = parseFloat(document.getElementById('newProdCost').value); const price = parseFloat(document.getElementById('newProdPrice').value); const barcode = document.getElementById('newProdBarcode').value.trim();
-            if(!url) { alert("خطأ تراخيص الشيت!"); return; } if(!name || isNaN(qty) || isNaN(cost) || isNaN(price) || !barcode) { alert("يرجى إكمال جميع الخانات والكمية أولاً!"); return; } if(qty < 0 || cost < 0 || price < 0) { alert("لا يمكن إدخال قيم سالبة!"); return; }
-            const payload = { action: "addProduct", barcode: barcode, name: name, qty: qty, cost: cost.toFixed(2), price: price.toFixed(2) };
-            showToast("⏳ جاري إضافة السلعة الجديدة وجدولة الكمية...");
-            fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-            .then(() => {
-                showToast("📥 تم حفظ المنتج وتعيين الكمية بنجاح! 🎉"); document.getElementById('newProdName').value = ''; document.getElementById('newProdQty').value = ''; document.getElementById('newProdCost').value = ''; document.getElementById('newProdPrice').value = ''; document.getElementById('newProdBarcode').value = ''; syncProducts(url);
+
+        function sanitizeInputsAndRecalc() {
+            let subtotal = 0; let totalCost = 0;
+            cart.forEach(item => { subtotal += item.price * item.qty; totalCost += item.cost * item.qty; });
+            document.getElementById('posSubtotal').innerText = subtotal.toFixed(2);
+            
+            let disc = parseFloat(document.getElementById('posDiscount').value) || 0;
+            let deliv = parseFloat(document.getElementById('posDelivery').value) || 0;
+            let finalTotal = (subtotal - disc) + deliv;
+            if(finalTotal < 0) finalTotal = 0;
+            document.getElementById('posFinalTotal').innerText = finalTotal.toFixed(2);
+        }
+
+        function setPosStatus(st) {
+            selectedStatus = st;
+            document.querySelectorAll('.status-opt').forEach(el => el.classList.remove('active'));
+            if(st === 'في الانتظار') document.getElementById('st-wait').classList.add('active');
+            if(st === 'في الطريق') document.getElementById('st-way').classList.add('active');
+            if(st === 'تم الاستلام') document.getElementById('st-done').classList.add('active');
+            if(st === 'راجع') document.getElementById('st-ret').classList.add('active');
+        }
+
+        function toggleCustomerView() {
+            const box = document.getElementById('customerBox');
+            box.style.display = document.getElementById('checkCustomer').checked ? 'grid' : 'none';
+        }
+
+        function generateInvoiceId() { return "RTG-" + Math.floor(100000 + Math.random() * 900000); }
+
+        function submitPosInvoice() {
+            if(cart.length === 0) { alert("الكارت فارغ! يرجى إضافة سلع أولاً."); return; }
+            const url = getActiveStoreUrl(); if(!url) return;
+            
+            let invId = generateInvoiceId();
+            let d = new Date();
+            let dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
+            
+            let pList = cart.map(i => `${i.qty}x [${i.code}] ${i.name}`).join(" ، ");
+            let subtotal = 0; let totalCost = 0;
+            cart.forEach(item => { subtotal += item.price * item.qty; totalCost += item.cost * item.qty; });
+            
+            let disc = parseFloat(document.getElementById('posDiscount').value) || 0;
+            let deliv = parseFloat(document.getElementById('posDelivery').value) || 0;
+            let finalTotal = (subtotal - disc) + deliv;
+            let netProfit = selectedStatus === "راجع" ? 0 : (subtotal - disc) - totalCost;
+
+            let payload = {
+                action: "addOrder", invoiceId: invId, date: dateStr, productsList: pList,
+                totalSales: finalTotal, netProfit: netProfit, method: document.getElementById('paymentMethodSelect').value,
+                deliveryFee: deliv, orderStatus: selectedStatus, cartItems: cart,
+                customerName: document.getElementById('checkCustomer').checked ? document.getElementById('cName').value.trim() : "غير محدد",
+                customerPhone: document.getElementById('checkCustomer').checked ? document.getElementById('cPhone').value.trim() : "غير محدد",
+                customerBackupPhone: document.getElementById('checkCustomer').checked ? document.getElementById('cBackup').value.trim() : "غير محدد",
+                customerArea: document.getElementById('checkCustomer').checked ? document.getElementById('cArea').value.trim() : "غير محدد"
+            };
+
+            fetch(url, { method: "POST", body: JSON.stringify(payload) })
+            .then(res => res.text()).then(txt => {
+                if(txt === "Success") {
+                    showToast(`تم ترحيل الفاتورة ${invId} وحفظ المخزن بنجاح! 🚀`);
+                    cart = []; renderCart();
+                    document.getElementById('checkCustomer').checked = false; toggleCustomerView();
+                    document.getElementById('cName').value = ""; document.getElementById('cPhone').value = "";
+                    document.getElementById('cBackup').value = ""; document.getElementById('cArea').value = "";
+                    document.getElementById('posDiscount').value = "0"; document.getElementById('posDelivery').value = "0";
+                    syncProductsData(); syncOrdersOnly();
+                } else { alert("حدث خطأ أثناء الترحيل لجوجل شيت!"); }
             });
         }
-        function submitRestockQtyToGoogle() {
-            const url = localStorage.getItem('rtg_script_url'); const barcode = document.getElementById('restockSelectProduct').value; const addedQty = parseInt(document.getElementById('restockQtyInput').value);
-            if (!url) { alert("خطأ تراخيص الشيت!"); return; } if (!barcode || isNaN(addedQty) || addedQty <= 0) { alert("يرجى اختيار السلعة وإدخال كمية صحيحة أكبر من الصفر!"); return; }
-            const payload = { action: "restockProduct", barcode: barcode, addedQty: addedQty }; showToast("⏳ جاري تحديث وجمع الكمية الجديدة سحابياً...");
-            fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-            .then(() => { showToast("📦 تم تزويد المخزن ودمج الكمية الجديدة بنجاح!"); document.getElementById('restockQtyInput').value = ''; document.getElementById('restockSelectProduct').value = ''; syncProducts(url); });
-        }
+
         function processOrderReturnToGoogle() {
-            const url = localStorage.getItem('rtg_script_url'); let id = document.getElementById('returnInvoiceInput').value.trim(); if(!url || !id) { alert("أدخل رقم الفاتورة!"); return; }
-            let target = cloudOrdersHistory.find(x => x.id === id); const payload = { action: "markAsReturned", invoiceId: id, cartItems: target ? [{code: "UNKNOWN", qty: 0}] : [] };
-            showToast("🔄 جاري إرسال الإشعار وتحديث الشيت والكميات...");
-            fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-            .then(() => { document.getElementById('returnInvoiceInput').value = ''; showToast("🔄 تم تحويل الفاتورة لـ (راجع) في جوجل شيت!"); syncProducts(url); setTimeout(syncOrdersOnly, 1500); });
+            let invId = document.getElementById('returnInvoiceInput').value.trim();
+            if(!invId) { alert("يرجى كتابة رقم الفاتورة أولاً!"); return; }
+            const url = getActiveStoreUrl(); if(!url) return;
+
+            if(!confirm(`هل أنت متأكد من معالجة إرجاع الفاتورة رقم ${invId} بالكامل للمخزن والمالية؟`)) return;
+
+            let payload = { action: "markAsReturned", invoiceId: invId };
+
+            fetch(url, { method: "POST", body: JSON.stringify(payload) })
+            .then(res => res.text()).then(txt => {
+                if(txt === "Returned_Success") {
+                    showToast(`نجح الإرجاع! تم تعديل الشيت وإعادة كميات السلع للمخزن بنجاح 🔁`);
+                    document.getElementById('returnInvoiceInput').value = "";
+                    syncProductsData(); syncOrdersOnly();
+                } else if(txt === "Order_Not_Found") {
+                    alert("❌ خطأ: رقم الفاتورة هذا غير موجود بجدول الطلبيات!");
+                } else {
+                    alert("حدث خطأ أثناء معالجة المرتجع سحابياً.");
+                }
+            });
         }
-        function renderVisualBarcode() { let val = document.getElementById('barcodeCanvasInput').value.trim(); if(val) { JsBarcode("#barcodeTargetSvg", val, { format:"CODE128", width:2, height:40, displayValue:true }); } }
+
+        function submitNewProductToGoogle() {
+            let name = document.getElementById('newProdName').value.trim();
+            let qty = document.getElementById('newProdQty').value.trim();
+            let cost = document.getElementById('newProdCost').value.trim();
+            let price = document.getElementById('newProdPrice').value.trim();
+            let barcode = document.getElementById('newProdBarcode').value.trim();
+
+            if(!name || !qty || !cost || !price || !barcode) { alert("يرجى ملء كافة الخانات لإضافة السلعة!"); return; }
+            const url = getActiveStoreUrl(); if(!url) return;
+
+            let payload = { action: "addProduct", name: name, qty: qty, cost: cost, price: price, barcode: barcode };
+            fetch(url, { method: "POST", body: JSON.stringify(payload) })
+            .then(res => res.text()).then(txt => {
+                if(txt === "Product_Added_Success") {
+                    showToast("تم إدراج المنتج الجديد بنجاح في جوجل شيت المخزن! 📥");
+                    document.getElementById('newProdName').value = ""; document.getElementById('newProdQty').value = "";
+                    document.getElementById('newProdCost').value = ""; document.getElementById('newProdPrice').value = "";
+                    document.getElementById('newProdBarcode').value = "";
+                    syncProductsData();
+                }
+            });
+        }
+
+        function submitRestockQtyToGoogle() {
+            let barcode = document.getElementById('restockSelectProduct').value;
+            let qty = document.getElementById('restockQtyInput').value;
+            if(!barcode || !qty || qty < 1) { alert("يرجى اختيار المنتج وتحديد كمية الإمداد الصالحة!"); return; }
+            const url = getActiveStoreUrl(); if(!url) return;
+
+            let payload = { action: "restockProduct", barcode: barcode, addedQty: qty };
+            fetch(url, { method: "POST", body: JSON.stringify(payload) })
+            .then(res => res.text()).then(txt => {
+                if(txt === "Restock_Success") {
+                    showToast("تم تحديث وجمع كمية الوارد الجديد للمخزن سحابياً! 🔄");
+                    document.getElementById('restockQtyInput').value = "";
+                    syncProductsData();
+                } else { alert("خطأ: لم يتم العثور على السلعة المراد تزويدها."); }
+            });
+        }
+
+        function generateAutoBarcodeForNewProduct() {
+            document.getElementById('newProdBarcode').value = "RTGP" + Math.floor(100000 + Math.random() * 900000);
+        }
+        function renderVisualBarcode() {
+            let val = document.getElementById('barcodeCanvasInput').value.trim();
+            if(!val) { alert("اكتب كود أولاً!"); return; }
+            JsBarcode("#barcodeTargetSvg", val, { format: "CODE128", width: 2, height: 50, displayValue: true });
+        }
+
+        function printSingleBarcodeIsolated() {
+            let svg = document.getElementById('barcodeTargetSvg').outerHTML;
+            if(!svg || document.getElementById('barcodeCanvasInput').value === "") { alert("يرجى توليد باركود مرئي أولاً!"); return; }
+            let w = window.open('', '', 'width=400,height=400');
+            w.document.write(`<html><head><title>Print Barcode</title><style>body{display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}</style></head><body>${svg}</body></html>`);
+            w.document.close(); setTimeout(() => { w.print(); w.close(); }, 300);
+        }
+
         function printCurrentInvoiceIsolated() {
-            if(cart.length === 0) { alert("السلة فارغة!"); return; }
-            const isCust = document.getElementById('checkCustomer').checked; let title = localStorage.getItem('rtg_shop_title') || 'منظومة المبيعات';
-            let html = `<div style="direction:rtl; font-family:'Cairo',sans-serif; padding:10px; color:black; background:white;"><h2 style="text-align:center; margin-bottom:5px;">${title}</h2><p style="text-align:center; font-size:12px; margin-bottom:15px;">التاريخ: ${new Date().toLocaleDateString('ar-LY')}</p><div style="font-size:12px; margin-bottom:10px; border-bottom:1px dashed #000; padding-bottom:5px;"><strong>الزبون:</strong> ${isCust?document.getElementById('cName').value:'غير محدد'}<br><strong>الهاتف:</strong> ${isCust?document.getElementById('cPhone').value:'غير محدد'}<br><strong>العنوان:</strong> ${isCust?document.getElementById('cArea').value:'غير محدد'}</div><table style="width:100%; border-collapse:collapse; font-size:12px; text-align:right;"><thead><tr style="border-bottom:1px solid #000;"><th>السلعة</th><th>الكمية</th><th>السعر</th></tr></thead><tbody>${cart.map(x => `<tr><td>${x.name}</td><td>${x.qty}</td><td>${(x.price*x.qty).toFixed(2)} د.ل</td></tr>`).join('')}</tbody></table><div style="margin-top:10px; font-size:12px; text-align:left; border-top:1px dashed #000; padding-top:5px;"><p>إجمالي البضاعة: ${document.getElementById('posSubtotal').innerText} د.ل</p><p>الخصم: -${parseFloat(document.getElementById('posDiscount').value).toFixed(2)} د.ل</p><p>التوصيل: +${parseFloat(document.getElementById('posDelivery').value).toFixed(2)} د.ل</p><h4 style="font-size:14px; margin-top:3px;">الإجمالي الكلي: ${document.getElementById('posFinalTotal').innerText} د.ل</h4></div></div>`;
-            let w = window.open('', '', 'width=600,height=600'); w.document.write(html); w.document.close(); setTimeout(() => { w.print(); w.close(); }, 500);
+            if(cart.length === 0) { alert("لا توجد مواد لطباعتها!"); return; }
+            let disc = parseFloat(document.getElementById('posDiscount').value) || 0;
+            let deliv = parseFloat(document.getElementById('posDelivery').value) || 0;
+            let subtotal = 0; cart.forEach(i => subtotal += i.price * i.qty);
+            let finalTotal = (subtotal - disc) + deliv;
+
+            let rows = cart.map(i => `<tr><td>${i.name}</td><td>${i.qty}</td><td>${(i.price*i.qty).toFixed(2)} د.ل</td></tr>`).join("");
+            let w = window.open('', '', 'width=600,height=700');
+            w.document.write(`<html><head><title>فاتورة فورية</title><style>body{font-family:'Cairo',sans-serif;direction:rtl;padding:20px;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;text-align:right;}</style></head>
+            <body><h2>RTG GEAR X - فاتورة مبيعات</h2><hr><table><thead><tr><th>السلعة</th><th>الكمية</th><th>الإجمالي</th></tr></thead><tbody>${rows}</tbody></table><br>
+            <p>إجمالي السلع: ${subtotal.toFixed(2)} د.ل</p><p>خصم: ${disc.toFixed(2)} د.ل</p><p>توصيل: ${deliv.toFixed(2)} د.ل</p><h3>الصافي النهائي الكلي: ${finalTotal.toFixed(2)} د.ل</h3></body></html>`);
+            w.document.close(); setTimeout(() => { w.print(); w.close(); }, 300);
         }
-        function printSingleBarcodeIsolated() { let val = document.getElementById('barcodeCanvasInput').value.trim(); if(!val) { alert("يرجى توليد باركود أولاً!"); return; } let w = window.open('', '', 'width=400,height=300'); w.document.write(`<div style="text-align:center; padding:20px; background:white; color:black;"><svg id="b"></svg></div><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"><\/script><script>JsBarcode("#b", "${val}", {format:"CODE128", width:2, height:50, displayValue:true}); setTimeout(() => { window.print(); window.close(); }, 400);<\/script>`); w.document.close(); }
-        function showToast(m) { const t = document.getElementById('toast'); t.innerText=m; t.style.display='block'; setTimeout(()=>t.style.display='none', 3000); }
-        window.addEventListener('DOMContentLoaded', checkOnLoad);
+
+        window.onload = checkOnLoad;
     </script>
 </body>
 </html>
