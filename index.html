@@ -343,7 +343,7 @@
       const key = document.getElementById('licenseKeyInput').value.trim();
       if (!key) return;
 
-      const masterScriptUrl = "https://script.google.com/macros/s/AKfycbyfE48iOshlQpGf-b2Uv8ApxiM6vFkRmsK9v0O8K9Uv-p6YF2Z7lZOf1Q1pS4o6mK-3/exec"; // الرابط الأساسي لشيت المشتركين الموحد
+      const masterScriptUrl = "https://script.google.com/macros/s/AKfycbxK9GGz87EzNCezo_Smm8If_wpVLTZ1UrlE-JDRkPQOwFaQVGkurxM_oj-8WE-BHMNc8Q/exec"; // الرابط الأساسي لشيت المشتركين الموحد
       const checkUrl = `${masterScriptUrl}?action=checkLicense&key=${encodeURIComponent(key)}&callback=onLicenseChecked`;
 
       executeJsonp(checkUrl);
