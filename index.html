@@ -480,10 +480,9 @@
                                 <div id="st-wait" class="status-opt active" style="background:var(--color-wait); color:black;" onclick="setPosStatus('في الانتظار')">في الانتظار</div>
                                 <div id="st-way" class="status-opt" style="background:var(--color-way); color:white;" onclick="setPosStatus('في الطريق')">في الطريق</div>
                                 <div id="st-done" class="status-opt" style="background:var(--color-success); color:black;" onclick="setPosStatus('تم الاستلام')">تم الاستلام</div>
-                                <div id="st-ret" class="status-opt" style="background:var(--color-return); color:white;" onclick="setPosStatus('راجع')">راجع</div>
                             </div>
                         </div>
-                        <button class="btn" style="width: 100%; margin-top: 20px; padding: 14px;" onclick="submitPosInvoice()">🚀 حفظ وترحيل الفاتورة لجوجل</button>
+                        <button class="btn" style="width: 100%; margin-top: 20px; padding: 14px;" onclick="submitPosInvoice()">🚀 صرف الفاتورة</button>
                         <button class="btn" style="width: 100%; margin-top: 10px; background: #2d3142; padding: 12px;" onclick="printCurrentInvoiceIsolated()">🖨️ طباعة الفاتورة الفورية</button>
                     </div>
                 </div>
@@ -509,10 +508,10 @@
                                 <button class="btn" style="background:#2d3142; font-size:12px; padding:12px 10px; margin-top:4px; white-space:nowrap;" onclick="generateAutoBarcodeForNewProduct()">توليد تلقائي 🎲</button>
                             </div>
                         </div>
-                        <button class="btn" style="width:100%; padding:14px; background:var(--color-success); color:black;" onclick="submitNewProductToGoogle()">📥 حفظ وإدراج كمنتج جديد</button>
+                        <button class="btn" style="width:100%; padding:14px; background:var(--color-success); color:black;" onclick="submitNewProductToGoogle()">📥 حفظ وإضافة منتج جديد</button>
                     </div>
                     <div class="card">
-                        <div class="card-title">📦 تزويد كمية واردة جديدة لمنتج متوفر مسبقاً</div>
+                        <div class="card-title">📦 اضافه كمية جديدة من منتج موجود مسبقا</div>
                         <div style="margin-bottom: 15px;">
                             <label style="font-size: 12px; font-weight: 600;">ابحث واختر السلعة المراد تزويدها:</label>
                             <select id="restockSelectProduct" class="input-field"><option value="">🔍 اختر السلعة...</option></select>
@@ -521,7 +520,7 @@
                             <label style="font-size: 12px; font-weight: 600;">الكمية الجديدة الواردة الحالية (+):</label>
                             <input type="number" id="restockQtyInput" class="input-field" placeholder="مثال: وفرت 20 قطعة" min="1">
                         </div>
-                        <button class="btn" style="width:100%; padding:14px; background:var(--color-digital); color:black;" onclick="submitRestockQtyToGoogle()">🔄 تحديث وجمع الكمية على الشيت الحالية</button>
+                        <button class="btn" style="width:100%; padding:14px; background:var(--color-digital); color:black;" onclick="submitRestockQtyToGoogle()">🔄 ايضافة الكميه الجديدة</button>
                     </div>
                 </div>
             </div>
@@ -577,8 +576,8 @@
                     <div class="card-title">🔄 معالجة الشحنات المرجوعة من شركة التوصيل</div>
                     <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6;">عند إدخال رقم الفاتورة هنا، ستقوم المنظومة بتعديل حالتها في ملف الجوجل شيت لـ (راجع)، تصفير ربحها، وإعادة إرجاع كميات قطعها إلى المخزن أوتوماتيكياً لحفظ دقة المخزن والمالية.</p>
                     <div style="display: flex; gap: 10px; max-width: 500px; flex-wrap: wrap;">
-                        <input type="text" id="returnInvoiceInput" class="input-field" placeholder="أدخل هنا رقم الفاتورة (مثال: RTG-123456)" style="flex: 1; min-width: 200px;">
-                        <button class="btn" style="background: var(--color-return); padding: 12px 20px; width: 100%; max-width: none; flex: 1; min-width: 150px;" onclick="processOrderReturnToGoogle()">تأكيد وإرجاع للمخزن والشيت 🔁</button>
+                        <input type="text" id="returnInvoiceInput" class="input-field" placeholder="أدخل هنا رقم الفاتورة" style="flex: 1; min-width: 200px;">
+                        <button class="btn" style="background: var(--color-return); padding: 12px 20px; width: 100%; max-width: none; flex: 1; min-width: 150px;" onclick="processOrderReturnToGoogle()">ارجاع الفاتوره 🔁</button>
                     </div>
                 </div>
             </div>
@@ -730,7 +729,7 @@
             const tbody = document.getElementById('reportsTableBody'); tbody.innerHTML = "";
             
             if(cloudOrdersHistory.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">لا توجد أي فواتير مسجلة حالياً بالشيت.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">لا توجد فواتير.</td></tr>`;
                 return;
             }
 
