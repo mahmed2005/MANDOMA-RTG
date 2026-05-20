@@ -100,7 +100,6 @@
   </nav>
 
   <main class="flex-1 p-3 max-w-7xl w-full mx-auto content-container">
-
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
       <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm flex items-center justify-between">
         <div>
@@ -140,8 +139,7 @@
             <input type="text" id="posSearch" oninput="renderPosProducts()" placeholder="ابحث باسم الملحق أو الباركود..." class="w-full pr-8 pl-3 py-2 text-xs bg-slate-950 border border-slate-800 text-white rounded-lg outline-none focus:border-brand-red transition-all">
           </div>
         </div>
-        <div id="posProductsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[50vh] lg:max-h-[65vh] pr-1">
-          </div>
+        <div id="posProductsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[50vh] lg:max-h-[65vh] pr-1"></div>
       </div>
       <div class="lg:col-span-5 bg-brand-cardBg rounded-xl border border-slate-800 shadow-sm p-3 flex flex-col justify-between space-y-3">
         <div>
@@ -149,8 +147,7 @@
             <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-basket-shopping text-brand-red"></i> سلة التجهيز الحالية</span>
             <button onclick="clearCart()" class="text-[10px] text-brand-red font-bold hover:underline">مسح السلة</button>
           </div>
-          <div id="cartItemsContainer" class="space-y-1.5 overflow-y-auto max-h-[25vh] lg:max-h-[35vh] pr-1">
-            </div>
+          <div id="cartItemsContainer" class="space-y-1.5 overflow-y-auto max-h-[25vh] lg:max-h-[35vh] pr-1"></div>
         </div>
         
         <div class="border-t border-slate-800 pt-3 space-y-2">
@@ -196,8 +193,7 @@
           <input type="text" id="orderSearch" oninput="renderOrders()" placeholder="ابحث برقم الفاتورة، اسم الزبون، أو الهاتف..." class="w-full pr-8 pl-3 py-2 text-xs bg-slate-950 border border-slate-800 text-white rounded-lg outline-none focus:border-brand-red">
         </div>
       </div>
-      <div id="ordersListContainer" class="space-y-2">
-        </div>
+      <div id="ordersListContainer" class="space-y-2"></div>
     </section>
 
     <section id="view-inventory" class="tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-3">
@@ -236,8 +232,7 @@
                 <th class="p-2 text-center">البيع</th>
               </tr>
             </thead>
-            <tbody id="inventoryTableBody" class="divide-y divide-slate-800">
-              </tbody>
+            <tbody id="inventoryTableBody" class="divide-y divide-slate-800"></tbody>
           </table>
         </div>
       </div>
@@ -246,13 +241,12 @@
     <section id="view-dashboard" class="tab-content hidden space-y-3">
       <div class="bg-brand-cardBg p-4 rounded-xl border border-slate-800 shadow-sm">
         <h3 class="text-sm font-bold text-slate-200 mb-2 flex items-center gap-2"><i class="fa-solid fa-chart-bar text-brand-red"></i> تحليل وتوزيع طرق دفع الفواتير بالمتجر</h3>
-        <div id="methodBreakdownContainer" class="space-y-2 pt-2">
-          </div>
+        <div id="methodBreakdownContainer" class="space-y-2 pt-2"></div>
       </div>
       <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
         <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-brand-red/10 rounded-full blur-xl"></div>
         <h4 class="text-xs font-bold text-brand-red">ملخص الأداء المالي الصافي لـ RTG GEARX</h4>
-        <p class="text-[11px] text-slate-400 mt-1">البيانات تعكس الأرباح الصافية بعد استبعاد قيم التكلفة التقديرية للسلع ومصاريف التوصيل الخارجية للمندوبين.</p>
+        <p class="text-[11px] text-slate-400 mt-1">البيانات تعكس الأرباح الصافية بعد استبعاد قيم التكلفة التقديرية للسلع ومصاريف التوصيل الخارجية.</p>
         <div class="mt-3 grid grid-cols-2 gap-4 border-t border-slate-800 pt-3">
           <div>
             <span class="text-[10px] text-slate-500 font-bold block">متوسط الفاتورة الواحدة</span>
@@ -265,7 +259,6 @@
         </div>
       </div>
     </section>
-
   </main>
 
   <div id="returnConfirmModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -369,7 +362,8 @@
       const key = document.getElementById('licenseKeyInput').value.trim();
       if (!key) return;
 
-      const masterScriptUrl = "https://script.google.com/macros/s/AKfycbxK9GGz87EzNCezo_Smm8If_wpVLTZ1UrlE-JDRkPQOwFaQVGkurxM_oj-8WE-BHMNc8Q/exec"; 
+      // ضع هنا رابط سكريبت الإدارة الرئيسي الخاص بك للتحقق من المشتركين
+      const masterScriptUrl = "https://script.google.com/macros/s/AKfycbyfE48iOshlQpGf-b2Uv8ApxiM6vFkRmsK9v0O8K9Uv-p6YF2Z7lZOf1Q1pS4o6mK-3/exec"; 
       const checkUrl = `${masterScriptUrl}?action=checkLicense&key=${encodeURIComponent(key)}&callback=onLicenseChecked`;
 
       executeJsonp(checkUrl);
@@ -635,13 +629,11 @@
       });
     }
 
-    // فتح واجهة الإرجاع المنبثقة الفخمة بدلاً من الـ Alert البشع
     function triggerReturnModal(invoiceId) {
       targetReturnInvoiceId = invoiceId;
       document.getElementById('returnNoteInput').value = "";
       document.getElementById('returnConfirmModal').classList.remove('hidden');
       
-      // ربط ديناميكي لزر التأكيد ليعمل بضغطة واحدة
       document.getElementById('confirmReturnBtn').onclick = () => {
         executeReturnAction();
       };
@@ -657,11 +649,12 @@
       const note = document.getElementById('returnNoteInput').value.trim();
       
       closeReturnModal();
+      // تم ربط الكولباك بالدالة المباشرة لتحديث السيرفر والقفل الفوري للنافذة
       executeJsonp(`${API_URL}?action=markAsReturnedGet&invoiceId=${targetReturnInvoiceId}&note=${encodeURIComponent(note)}&callback=onReturnProcessedResponse`);
     }
 
     function onReturnProcessedResponse(res) {
-      syncData();
+      syncData(); // إعادة مزامنة البيانات وتحديث المخزن فوراً على الشاشة
     }
 
     function updateOrderStatus(invoiceId, nextStatus) {
