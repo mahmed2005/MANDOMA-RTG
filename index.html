@@ -362,7 +362,6 @@
       const key = document.getElementById('licenseKeyInput').value.trim();
       if (!key) return;
 
-      // ضع هنا رابط سكريبت الإدارة الرئيسي الخاص بك للتحقق من المشتركين
       const masterScriptUrl = "https://script.google.com/macros/s/AKfycbyfE48iOshlQpGf-b2Uv8ApxiM6vFkRmsK9v0O8K9Uv-p6YF2Z7lZOf1Q1pS4o6mK-3/exec"; 
       const checkUrl = `${masterScriptUrl}?action=checkLicense&key=${encodeURIComponent(key)}&callback=onLicenseChecked`;
 
@@ -531,55 +530,52 @@
       let subtotal = 0;
       cart.forEach(i => subtotal += (i.price * i.qty));
       const delFee = parseFloat(document.getElementById('deliveryFee').value) || 0;
-      const total = subtotal + delFee;
-
+      
       document.getElementById('cartSubtotal').innerText = subtotal.toFixed(2) + " د.ل";
       document.getElementById('cartDeliveryDisplay').innerText = delFee.toFixed(2) + " د.ل";
-      document.getElementById('cartTotal').innerText = total.toFixed(2) + " د.ل";
+      document.getElementById('cartTotal').innerText = (subtotal + delFee).toFixed(2) + " د.ل";
     }
 
     function submitOrder() {
       if (cart.length === 0) return;
-      if (!API_URL) return;
+      const invId = "INV-" + Math.floor(100000 + Math.random() * 900000);
+      const d = new Date();
+      const dateStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
 
-      let netProfit = 0;
-      let subtotalSales = 0;
-      let productsListParts = [];
-
-      cart.forEach(item => {
-        subtotalSales += (item.price * item.qty);
-        netProfit += ((item.price - item.cost) * item.qty);
-        productsListParts.push(`${item.qty}x [${item.code}] ${item.name}`);
+      let pList = [];
+      let totalSales = 0;
+      let totalCost = 0;
+      cart.forEach(i => {
+        pList.push(`${i.qty}x [${i.code}] ${i.name}`);
+        totalSales += (i.price * i.qty);
+        totalCost += (i.cost * i.qty);
       });
 
-      const delivery = parseFloat(document.getElementById('deliveryFee').value) || 0;
-      const invoiceId = "INV-" + Date.now().toString().slice(-6);
-      
-      const payload = {
+      const delFee = parseFloat(document.getElementById('deliveryFee').value) || 0;
+      const netProfit = totalSales - totalCost;
+
+      const orderData = {
         action: "addOrder",
-        invoiceId: invoiceId,
-        date: new Date().toLocaleString('ar-LY', { hour12: false }),
-        productsList: productsListParts.join(" ، "),
-        totalSales: (subtotalSales + delivery),
+        invoiceId: invId,
+        date: dateStr,
+        productsList: pList.join(" ، "),
+        totalSales: totalSales + delFee,
         netProfit: netProfit,
         method: document.getElementById('payMethod').value,
-        deliveryFee: delivery,
-        orderStatus: "في الانتظار",
+        deliveryFee: delFee,
+        orderStatus: "جاهز",
         returnNote: "",
-        customerName: document.getElementById('cName').value.trim() || "غير محدد",
-        customerPhone: document.getElementById('cPhone').value.trim() || "غير محدد",
-        customerBackupPhone: document.getElementById('cBackup').value.trim() || "غير محدد",
-        customerArea: document.getElementById('cArea').value.trim() || "غير محدد",
-        cartItems: cart
+        customerName: document.getElementById('cName').value.trim() || "زبون عابر",
+        customerPhone: document.getElementById('cPhone').value.trim(),
+        customerBackupPhone: document.getElementById('cBackup').value.trim(),
+        customerArea: document.getElementById('cArea').value.trim()
       };
-
-      openPrintModal(invoiceId, payload.date, subtotalSales, delivery, (subtotalSales + delivery));
 
       fetch(API_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(orderData)
       }).then(() => {
         clearCart();
         syncData();
@@ -589,39 +585,27 @@
     function renderOrders() {
       const container = document.getElementById('ordersListContainer');
       container.innerHTML = "";
-      const q = document.getElementById('orderSearch').value.toLowerCase().trim();
+      const query = document.getElementById('orderSearch').value.toLowerCase().trim();
 
       globalOrders.forEach(o => {
-        if (q && !o.id.toLowerCase().includes(q) && !o.cName.toLowerCase().includes(q) && !o.cPhone.includes(q)) return;
+        if (query && !String(o.id).toLowerCase().includes(query) && !o.cName.toLowerCase().includes(query) && !o.cPhone.includes(query)) return;
 
+        const isRet = o.status === "راجع";
         const card = document.createElement('div');
-        card.className = "bg-brand-cardBg border border-slate-800 rounded-xl p-3 shadow-sm space-y-2 relative text-right";
+        card.className = `p-3 rounded-xl border text-right transition-all ${isRet ? 'bg-slate-950/40 border-slate-900 opacity-60' : 'bg-brand-cardBg border-slate-800'}`;
         
-        let statusBadgeClass = "bg-slate-800 text-slate-400 border border-slate-700";
-        if (o.status === "تم التوصيل") statusBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-        if (o.status === "في الطريق") statusBadgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
-        if (o.status === "راجع") statusBadgeClass = "bg-brand-red/10 text-brand-red border border-brand-red/20";
-
         card.innerHTML = `
-          <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-            <span class="text-xs font-black text-white">${o.id}</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${statusBadgeClass}">${o.status}</span>
+          <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
+            <span class="text-xs font-mono font-bold text-slate-400">#${o.id}</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${isRet ? 'bg-brand-red/10 text-brand-red' : 'bg-emerald-500/10 text-emerald-400'}">${o.status}</span>
           </div>
-          <p class="text-[11px] text-slate-500 font-medium"><i class="fa-solid fa-clock ml-1"></i> ${o.date}</p>
-          <p class="text-xs text-slate-300 font-bold"><i class="fa-solid fa-user ml-1 text-slate-500"></i> ${o.cName} - ${o.cPhone}</p>
-          <div class="bg-slate-900 p-1.5 rounded-lg text-[11px] text-slate-400 border border-slate-800 leading-relaxed">${o.desc}</div>
-          <div class="flex items-center justify-between pt-1.5">
-            <span class="text-xs font-bold text-slate-400">مطلوب: <b class="text-brand-red text-sm font-black">${o.total.toFixed(2)} د.ل</b></span>
-            <div class="flex items-center gap-1">
-              ${o.status !== "راجع" ? `
-                <select onchange="updateOrderStatus('${o.id}', this.value)" class="text-[10px] border border-slate-700 rounded px-1 py-0.5 bg-slate-900 text-slate-200 outline-none">
-                  <option value="" disabled selected>تغيير الحالة</option>
-                  <option value="في الانتظار">في الانتظار</option>
-                  <option value="في الطريق">في الطريق</option>
-                  <option value="تم التوصيل">تم التوصيل</option>
-                </select>
-                <button onclick="triggerReturnModal('${o.id}')" class="text-[10px] bg-brand-red/10 border border-brand-red/20 text-brand-red hover:bg-brand-red/20 px-2 py-1 rounded font-bold"><i class="fa-solid fa-rotate-left"></i> إرجاع</button>
-              ` : `<span class="text-[10px] text-brand-red/70 italic">الفاتورة مرتجعة والسلع بالرف</span>`}
+          <p class="text-xs font-bold text-white">${o.cName} <span class="text-[10px] text-slate-500 font-mono font-normal mr-2">${o.cPhone}</span></p>
+          <p class="text-[11px] text-slate-400 mt-1"><span class="text-slate-500">الملحقات:</span> ${o.desc}</p>
+          <div class="flex items-center justify-between border-t border-slate-800 pt-2 mt-2">
+            <span class="text-xs font-black text-brand-red">${o.total.toFixed(2)} د.ل <span class="text-[9px] text-slate-500 font-normal mr-1">(${o.method})</span></span>
+            <div class="flex gap-1.5">
+              ${!isRet ? `<button onclick="openReturnModal('${o.id}')" class="text-[10px] bg-brand-red/10 hover:bg-brand-red/20 text-brand-red border border-brand-red/20 px-2 py-1 rounded-md font-bold transition-all">إرجاع الفاتورة</button>` : ''}
+              <button onclick="openPrintModal('${o.id}')" class="text-[10px] bg-slate-900 hover:bg-black text-slate-300 border border-slate-800 px-2 py-1 rounded-md font-bold transition-all"><i class="fa-solid fa-print"></i></button>
             </div>
           </div>
         `;
@@ -629,65 +613,32 @@
       });
     }
 
-    function triggerReturnModal(invoiceId) {
+    function openReturnModal(invoiceId) {
       targetReturnInvoiceId = invoiceId;
       document.getElementById('returnNoteInput').value = "";
       document.getElementById('returnConfirmModal').classList.remove('hidden');
-      
-      document.getElementById('confirmReturnBtn').onclick = () => {
-        executeReturnAction();
-      };
     }
-
     function closeReturnModal() {
       document.getElementById('returnConfirmModal').classList.add('hidden');
-      targetReturnInvoiceId = "";
     }
 
-    function executeReturnAction() {
-      if (!API_URL || !targetReturnInvoiceId) return;
-      const note = document.getElementById('returnNoteInput').value.trim();
+    // ربط تأكيد الإرجاع بالدالة التزامنية الحية وإعادة تحديث الواجهة تلقائياً
+    document.getElementById('confirmReturnBtn').onclick = function() {
+      if (!targetReturnInvoiceId || !API_URL) return;
+      const note = document.getElementById('returnNoteInput').value.trim() || "تم الإرجاع من المنظومة";
       
+      document.getElementById('confirmReturnBtn').innerText = "جاري الإرجاع...";
+      document.getElementById('confirmReturnBtn').disabled = true;
+
+      const returnUrl = `${API_URL}?action=markAsReturnedGet&invoiceId=${encodeURIComponent(targetReturnInvoiceId)}&note=${encodeURIComponent(note)}&callback=onReturnProcessed`;
+      executeJsonp(returnUrl);
+    };
+
+    function onReturnProcessed(res) {
+      document.getElementById('confirmReturnBtn').innerText = "نعم، تأكيد الإرجاع";
+      document.getElementById('confirmReturnBtn').disabled = false;
       closeReturnModal();
-      // تم ربط الكولباك بالدالة المباشرة لتحديث السيرفر والقفل الفوري للنافذة
-      executeJsonp(`${API_URL}?action=markAsReturnedGet&invoiceId=${targetReturnInvoiceId}&note=${encodeURIComponent(note)}&callback=onReturnProcessedResponse`);
-    }
-
-    function onReturnProcessedResponse(res) {
-      syncData(); // إعادة مزامنة البيانات وتحديث المخزن فوراً على الشاشة
-    }
-
-    function updateOrderStatus(invoiceId, nextStatus) {
-      if (!API_URL || !invoiceId || !nextStatus) return;
-      executeJsonp(`${API_URL}?action=updateStatusGet&invoiceId=${invoiceId}&status=${encodeURIComponent(nextStatus)}&callback=onStatusUpdatedResponse`);
-    }
-
-    function onStatusUpdatedResponse(res) {
-      syncData();
-    }
-
-    function renderInventory() {
-      const tbody = document.getElementById('inventoryTableBody');
-      tbody.innerHTML = "";
-      let count = 0;
-
-      Object.keys(globalProducts).forEach(barcode => {
-        count++;
-        const p = globalProducts[barcode];
-        const isLow = p.qty <= 3;
-
-        const tr = document.createElement('tr');
-        tr.className = `border-b border-slate-900 hover:bg-slate-900/50 ${isLow ? 'bg-brand-red/10' : ''}`;
-        tr.innerHTML = `
-          <td class="p-2 font-mono text-slate-500 select-all">${barcode}</td>
-          <td class="p-2 font-bold text-slate-200">${p.name}</td>
-          <td class="p-2 text-center font-black ${isLow ? 'text-brand-red' : 'text-slate-300'}">${p.qty}</td>
-          <td class="p-2 text-center text-slate-500">${p.cost.toFixed(2)}</td>
-          <td class="p-2 text-center font-bold text-brand-red">${p.price.toFixed(2)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-      document.getElementById('inventoryCountDisplay').innerText = count + " سلع";
+      syncData(); // إعادة سحب البيانات وجرد المخزن فوراً ليعكس التحديث الجديد (+2)
     }
 
     function addNewProduct() {
@@ -697,14 +648,13 @@
       const cost = parseFloat(document.getElementById('invCost').value) || 0;
       const price = parseFloat(document.getElementById('invPrice').value) || 0;
 
-      if (!barcode || !name || !API_URL) return;
+      if (!barcode || !name) return;
 
-      const payload = { action: "addProduct", barcode, name, qty, cost, price };
       fetch(API_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ action: "addProduct", barcode, name, qty, cost, price })
       }).then(() => {
         document.getElementById('invBarcode').value = "";
         document.getElementById('invName').value = "";
@@ -718,15 +668,13 @@
     function restockProduct() {
       const barcode = document.getElementById('restockBarcode').value.trim();
       const addedQty = parseFloat(document.getElementById('restockQty').value) || 0;
+      if (!barcode || addedQty <= 0) return;
 
-      if (!barcode || addedQty <= 0 || !API_URL) return;
-
-      const payload = { action: "restockProduct", barcode, addedQty };
       fetch(API_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ action: "restockProduct", barcode, addedQty })
       }).then(() => {
         document.getElementById('restockBarcode').value = "";
         document.getElementById('restockQty').value = "";
@@ -734,80 +682,94 @@
       });
     }
 
+    function renderInventory() {
+      const tbody = document.getElementById('inventoryTableBody');
+      tbody.innerHTML = "";
+      let count = 0;
+
+      Object.keys(globalProducts).forEach(barcode => {
+        count++;
+        const prod = globalProducts[barcode];
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-900/50 text-slate-300 border-b border-slate-900";
+        tr.innerHTML = `
+          <td class="p-2 font-mono text-[11px] text-slate-500">${barcode}</td>
+          <td class="p-2 font-medium text-white">${prod.name}</td>
+          <td class="p-2 text-center font-bold ${prod.qty <= 3 ? 'text-brand-red' : 'text-slate-300'}">${prod.qty}</td>
+          <td class="p-2 text-center font-mono text-slate-400">${prod.cost.toFixed(2)}</td>
+          <td class="p-2 text-center font-mono font-bold text-emerald-400">${prod.price.toFixed(2)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('inventoryCountDisplay').innerText = count + " سلع ملحقة";
+    }
+
     function calculateGlobalStats() {
-      let totalSales = 0;
-      let totalProfit = 0;
-      let ordersCount = 0;
-      let returnedCount = 0;
-      let methodCounts = {};
+      let sales = 0;
+      let profit = 0;
+      let count = 0;
+      let rets = 0;
+      let methods = {};
 
       globalOrders.forEach(o => {
-        ordersCount++;
         if (o.status === "راجع") {
-          returnedCount++;
+          rets++;
         } else {
-          totalSales += o.total;
-          totalProfit += o.profit;
-          methodCounts[o.method] = (methodCounts[o.method] || 0) + o.total;
+          sales += o.total;
+          profit += o.profit;
+          count++;
+          methods[o.method] = (methods[o.method] || 0) + o.total;
         }
       });
 
-      document.getElementById('statSales').innerText = totalSales.toFixed(2) + " د.ل";
-      document.getElementById('statProfit').innerText = totalProfit.toFixed(2) + " د.ل";
-      document.getElementById('statOrdersCount').innerText = ordersCount + " طلب";
-      document.getElementById('statReturned').innerText = returnedCount + " طلب";
+      document.getElementById('statSales').innerText = sales.toFixed(2) + " د.ل";
+      document.getElementById('statProfit').innerText = profit.toFixed(2) + " د.ل";
+      document.getElementById('statOrdersCount').innerText = count + " طلب";
+      document.getElementById('statReturned').innerText = rets + " طلب";
 
-      const activeOrdersCount = (ordersCount - returnedCount) || 1;
-      document.getElementById('dashAvgOrder').innerText = (totalSales / activeOrdersCount).toFixed(2) + " د.ل";
-      document.getElementById('dashReturnRate').innerText = ((returnedCount / (ordersCount || 1)) * 100).toFixed(0) + "%";
+      document.getElementById('dashAvgOrder').innerText = count > 0 ? (sales / count).toFixed(2) + " د.ل" : "0.00 د.ل";
+      const totalAll = count + rets;
+      document.getElementById('dashReturnRate').innerText = totalAll > 0 ? Math.round((rets / totalAll) * 100) + "%" : "0%";
 
-      const methodContainer = document.getElementById('methodBreakdownContainer');
-      methodContainer.innerHTML = "";
-      
-      if (Object.keys(methodCounts).length === 0) {
-        methodContainer.innerHTML = `<p class="text-xs text-slate-500 italic">لا توجد حركات بيع حية لعرضها.</p>`;
-        return;
-      }
-
-      Object.keys(methodCounts).forEach(m => {
-        const amt = methodCounts[m];
-        const pct = totalSales > 0 ? ((amt / totalSales) * 100).toFixed(0) : 0;
-
-        const bar = document.createElement('div');
-        bar.className = "space-y-1";
-        bar.innerHTML = `
-          <div class="flex justify-between text-xs font-medium">
-            <span class="text-slate-300">${m}</span>
-            <span class="text-slate-400 font-bold">${amt.toFixed(2)} د.ل (${pct}%)</span>
-          </div>
-          <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-            <div class="bg-brand-red h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-          </div>
+      const breakdown = document.getElementById('methodBreakdownContainer');
+      breakdown.innerHTML = "";
+      Object.keys(methods).forEach(m => {
+        const amt = methods[m];
+        const pct = sales > 0 ? Math.round((amt / sales) * 100) : 0;
+        const div = document.createElement('div');
+        div.className = "space-y-1";
+        div.innerHTML = `
+          <div class="flex justify-between text-xs font-medium"><span class="text-slate-300">${m}</span><span class="text-slate-400 font-mono">${amt.toFixed(2)} د.ل (${pct}%)</span></div>
+          <div class="w-full bg-slate-950 rounded-full h-1.5"><div class="bg-brand-red h-1.5 rounded-full" style="width: ${pct}%"></div></div>
         `;
-        methodContainer.appendChild(bar);
+        breakdown.appendChild(div);
       });
     }
 
-    function openPrintModal(invoiceId, date, subtotal, delivery, total) {
-      document.getElementById('pInvoiceId').innerText = "رقم الفاتورة: " + invoiceId;
-      document.getElementById('pDate').innerText = "التاريخ: " + date;
+    function openPrintModal(invoiceId) {
+      const o = globalOrders.find(order => String(order.id) === String(invoiceId));
+      if (!o) return;
 
-      const pItems = document.getElementById('pItems');
-      pItems.innerHTML = "";
-      cart.forEach(i => {
+      document.getElementById('pInvoiceId').innerText = `رقم الفاتورة: #${o.id}`;
+      document.getElementById('pDate').innerText = `التاريخ: ${o.date}`;
+      document.getElementById('pShopName').innerText = SHOP_NAME;
+
+      const itemsDiv = document.getElementById('pItems');
+      itemsDiv.innerHTML = "";
+      const items = o.desc.split(" ، ");
+      items.forEach(item => {
         const p = document.createElement('p');
-        p.className = "flex justify-between";
-        p.innerHTML = `<span>${i.name} (x${i.qty})</span> <span>${(i.price * i.qty).toFixed(2)}</span>`;
-        pItems.appendChild(p);
+        p.innerText = item;
+        itemsDiv.appendChild(p);
       });
 
-      document.getElementById('pSubtotal').innerText = "الإجمالي الفرعي: " + subtotal.toFixed(2) + " د.ل";
-      document.getElementById('pDelivery').innerText = "التوصيل: " + delivery.toFixed(2) + " د.ل";
-      document.getElementById('pTotal').innerText = "المطلوب الصافي: " + total.toFixed(2) + " د.ل";
+      const sub = o.total - o.delivery;
+      document.getElementById('pSubtotal').innerText = `الإجمالي الفرعي: ${sub.toFixed(2)} د.ل`;
+      document.getElementById('pDelivery').innerText = `التوصيل: ${o.delivery.toFixed(2)} د.ل`;
+      document.getElementById('pTotal').innerText = `المطلوب الصافي: ${o.total.toFixed(2)} د.ل`;
 
       document.getElementById('printModal').classList.remove('hidden');
     }
-
     function closePrintModal() {
       document.getElementById('printModal').classList.add('hidden');
     }
