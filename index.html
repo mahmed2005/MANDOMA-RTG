@@ -24,7 +24,6 @@
             --color-return: #ff1744;
         }
 
-        /* 💡 سمات الوضع المضيء */
         [data-theme="light"] {
             --bg-main: #f0f2f5;
             --bg-card: #ffffff;
@@ -81,15 +80,16 @@
             display: none; 
             flex: 1; 
             flex-direction: column; 
+            width: 100%;
         }
         
+        /* ✨ تعديل الهيدر لإلغاء الفراغ الجانبي وجعله ممتداً وأنيقاً بنسبة 100% */
         header { 
             background: var(--bg-card); 
-            padding: 15px; 
+            padding: 15px 20px; 
             border-bottom: 2px solid var(--border-color); 
             display: flex; 
             flex-direction: column;
-            align-items: center; 
             gap: 15px; 
             width: 100%;
         }
@@ -103,18 +103,18 @@
 
         .logo-section {
             text-align: right;
+            flex: 1;
         }
-        .logo-section h1 { font-weight: 900; font-size: 22px; white-space: nowrap; color: var(--text-light); }
+        .logo-section h1 { font-weight: 900; font-size: 24px; white-space: nowrap; color: var(--text-light); letter-spacing: 0.5px; }
         .logo-section h1 span { color: var(--primary-red); }
-        .logo-section p { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+        .logo-section p { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
         
-        /* 🎛️ زر التبديل بين الوضعين المظلم والمضيء بتصميم عالمي */
         .theme-toggle-btn {
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: var(--text-light);
-            padding: 8px 14px;
-            border-radius: 20px;
+            padding: 10px 16px;
+            border-radius: 30px;
             cursor: pointer;
             font-size: 12px;
             font-weight: bold;
@@ -122,17 +122,17 @@
             align-items: center;
             gap: 6px;
             transition: 0.2s;
+            white-space: nowrap;
         }
 
-        /* 🔄 تحويل القائمة العلوية لبكرة متطورة لمنع الفراغ الجانبي نهائياً */
         .nav-tabs-container {
             width: 100%;
             overflow-x: auto;
-            scrollbar-width: none; /* إخفاء في فايرفوكس */
+            scrollbar-width: none; 
             -webkit-overflow-scrolling: touch;
         }
         .nav-tabs-container::-webkit-scrollbar {
-            display: none; /* إخفاء في كروم وسفاري */
+            display: none; 
         }
 
         .nav-tabs { 
@@ -149,7 +149,7 @@
             background: none; 
             border: none; 
             color: var(--text-muted); 
-            padding: 10px 16px; 
+            padding: 10px 18px; 
             border-radius: 8px; 
             cursor: pointer; 
             font-weight: 700; 
@@ -171,7 +171,6 @@
             padding: 15px; 
             flex: 1; 
             width: 100%; 
-            margin: 0 auto; 
         }
         
         .tab-content { display: none; }
@@ -183,6 +182,7 @@
             border-radius: 12px; 
             padding: 18px; 
             margin-bottom: 15px; 
+            width: 100%;
         }
         
         .card-title { 
@@ -201,6 +201,7 @@
             grid-template-columns: 1.6fr 1.4fr; 
             gap: 15px; 
             align-items: start;
+            width: 100%;
         }
         
         .input-field { 
@@ -354,6 +355,7 @@
         }
         
         @media (max-width: 600px) {
+            header { padding: 12px 15px; }
             .customer-grid { grid-template-columns: 1fr; }
             .status-selectors { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .status-opt { padding: 12px; font-size: 13px; }
@@ -590,7 +592,6 @@
         
         let globalProducts = {}; let cart = []; let selectedStatus = "في الانتظار"; let cloudOrdersHistory = []; 
 
-        // 🌓 دالة تبديل الثيم المظلم والمضيء وحفظ الإعدادات في المتصفح
         function initTheme() {
             const savedTheme = localStorage.getItem('rtg_theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
@@ -609,11 +610,9 @@
             const icon = document.getElementById('theme-icon');
             const text = document.getElementById('theme-text');
             if (theme === 'light') {
-                icon.innerText = "🌙";
-                text.innerText = "الوضع المظلم";
+                icon.innerText = "🌙"; text.innerText = "الوضع المظلم";
             } else {
-                icon.innerText = "☀️";
-                text.innerText = "الوضع المضيء";
+                icon.innerText = "☀️"; text.innerText = "الوضع المضيء";
             }
         }
 
@@ -632,7 +631,7 @@
         }
 
         function checkOnLoad() {
-            initTheme(); // تشغيل الثيم الفوري
+            initTheme(); 
             const saved = localStorage.getItem('rtg_license');
             if(saved) { 
                 document.getElementById('lock-screen').style.display = 'none'; 
@@ -656,7 +655,7 @@
         function initSystem() {
             const title = localStorage.getItem('rtg_shop_title');
             if(title) document.getElementById('shopTitleHeader').innerHTML = `${title} <span>POS</span>`;
-            syncProductsData(); syncOrdersOnly();
+            syncProductsData(); syncOrdersHistoryEngine();
         }
 
         function switchTab(tabId, btnElement) {
@@ -714,7 +713,9 @@
             }
         }
 
-        function syncOrdersOnly() {
+        function syncOrdersOnly() { syncOrdersHistoryEngine(); }
+
+        function syncOrdersHistoryEngine() {
             const url = getActiveStoreUrl(); if(!url) return;
             document.getElementById('reportsTableBody').innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">جاري مزامنة وسحب الفواتير الحية... 🔄</td></tr>`;
             const old = document.getElementById('orders-sync-script'); if(old) old.remove();
@@ -743,7 +744,7 @@
                 if(o.status === "تم الاستلام") stColor = "var(--color-success)";
                 if(o.status === "راجع") stColor = "var(--color-return)";
 
-                let custBtn = o.cName !== "غير محدد" ? `<button class="btn-small" onclick="openCustomerModal('${o.id}','${o.cName}','${o.cPhone}','${o.cBackup}','${o.cArea}')">👤 عرض</button>` : `<span style="color:var(--text-muted); font-size:11px;">مباشر</span>`;
+                let custBtn = o.cName !== "غير مححدد" && o.cName !== "غير محدد" ? `<button class="btn-small" onclick="openCustomerModal('${o.id}','${o.cName}','${o.cPhone}','${o.cBackup}','${o.cArea}')">👤 عرض</button>` : `<span style="color:var(--text-muted); font-size:11px;">مباشر</span>`;
 
                 let row = `<tr>
                     <td><span style="font-weight:bold; color:var(--primary-red);">${o.id}</span></td>
@@ -792,12 +793,10 @@
         function deleteCartItem(index) { cart.splice(index, 1); renderCart(); }
 
         function updateCartItemPrice(index, val) {
-            let parsed = parseFloat(val) || 0;
-            cart[index].price = parsed; sanitizeInputsAndRecalc();
+            let parsed = parseFloat(val) || 0; cart[index].price = parsed; sanitizeInputsAndRecalc();
         }
         function updateCartItemQty(index, val) {
-            let parsed = parseFloat(val) || 1;
-            cart[index].qty = parsed; sanitizeInputsAndRecalc();
+            let parsed = parseFloat(val) || 1; cart[index].qty = parsed; sanitizeInputsAndRecalc();
         }
 
         function renderCart() {
@@ -851,7 +850,6 @@
             let invId = generateInvoiceId();
             let d = new Date();
             let dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
-            
             let pList = cart.map(i => `${i.qty}x [${i.code}] ${i.name}`).join(" ، ");
             let subtotal = 0; let totalCost = 0;
             cart.forEach(item => { subtotal += item.price * item.qty; totalCost += item.cost * item.qty; });
@@ -874,38 +872,43 @@
             fetch(url, { method: "POST", body: JSON.stringify(payload) })
             .then(res => res.text()).then(txt => {
                 if(txt === "Success") {
-                    showToast(`تم ترحيل الفاتورة ${invId} وحفظ المخزن بنجاح! 🚀`);
+                    showToast(`تم ترحيل الفاتورة ${invId} بنجاح! 🚀`);
                     cart = []; renderCart();
                     document.getElementById('checkCustomer').checked = false; toggleCustomerView();
                     document.getElementById('cName').value = ""; document.getElementById('cPhone').value = "";
                     document.getElementById('cBackup').value = ""; document.getElementById('cArea').value = "";
                     document.getElementById('posDiscount').value = "0"; document.getElementById('posDelivery').value = "0";
-                    syncProductsData(); syncOrdersOnly();
+                    syncProductsData(); syncOrdersHistoryEngine();
                 } else { alert("حدث خطأ أثناء الترحيل لجوجل شيت!"); }
             });
         }
 
+        /* 🔄 دالة معالجة المرتجعات السحابية الفورية بنظام الـ JSONP الصامد والأكيد 100% */
         function processOrderReturnToGoogle() {
             let invId = document.getElementById('returnInvoiceInput').value.trim();
             if(!invId) { alert("يرجى كتابة رقم الفاتورة أولاً!"); return; }
             const url = getActiveStoreUrl(); if(!url) return;
 
-            if(!confirm(`هل أنت متأكد من معالجة إرجاع الفاتورة رقم ${invId} بالكامل للمخزن والمالية؟`)) return;
+            if(!confirm(`هل أنت متأكد من معالجة إرجاع الفاتورة رقم ${invId} بالكامل وإرجاعها للمخزن؟`)) return;
 
-            let payload = { action: "markAsReturned", invoiceId: invId };
-
-            fetch(url, { method: "POST", body: JSON.stringify(payload) })
-            .then(res => res.text()).then(txt => {
-                if(txt === "Returned_Success") {
-                    showToast(`نجح الإرجاع! تم تعديل الشيت وإعادة كميات السلع للمخزن بنجاح 🔁`);
+            const oldReturnScript = document.getElementById('return-engine-script'); if(oldReturnScript) oldReturnScript.remove();
+            
+            window.handleCloudReturnResult = function(res) {
+                if(res.status === "success") {
+                    showToast(`نجح الإرجاع الفوري للفاتورة ${invId}! تم تحديث التقارير لـ (راجع) وإعادة السلع للمخزن 🔁`);
                     document.getElementById('returnInvoiceInput').value = "";
-                    syncProductsData(); syncOrdersOnly();
-                } else if(txt === "Order_Not_Found") {
-                    alert("❌ خطأ: رقم الفاتورة هذا غير موجود بجدول الطلبيات!");
+                    syncProductsData(); syncOrdersHistoryEngine(); // تحديث فوري ومباشر لجدول الأرباح والتقارير
+                } else if(res.status === "not_found") {
+                    alert("❌ خطأ: لم يتم العثور على فاتورة بهذا الرقم في شيت الطلبيات!");
                 } else {
-                    alert("حدث خطأ أثناء معالجة المرتجع سحابياً.");
+                    alert("حدث خطأ غير متوقع أثناء المعالجة.");
                 }
-            });
+            };
+
+            const s = document.createElement('script');
+            s.id = 'return-engine-script';
+            s.src = `${url}?action=markAsReturnedGet&invoiceId=${encodeURIComponent(invId)}&callback=handleCloudReturnResult`;
+            document.body.appendChild(s);
         }
 
         function submitNewProductToGoogle() {
