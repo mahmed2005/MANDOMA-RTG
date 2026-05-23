@@ -40,6 +40,20 @@
     .toast.success { background: #064e3b; border: 1px solid #10b981; color: #6ee7b7; }
     .toast.error { background: #7f1d1d; border: 1px solid #ef4444; color: #fca5a5; }
     .toast.info { background: #1e3a5f; border: 1px solid #3b82f6; color: #93c5fd; }
+    .rtg-logo { display: inline-flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 30%, rgba(255,30,39,.18), transparent 58%); }
+    .rtg-logo svg { width: 100%; height: 100%; filter: drop-shadow(0 10px 18px rgba(255,30,39,.22)) drop-shadow(0 8px 14px rgba(0,0,0,.45)); }
+    .rtg-logo-large { width: 7rem; height: 7rem; margin: 0 auto; }
+    .rtg-logo-small { width: 2.25rem; height: 2.25rem; border: 1px solid rgb(51 65 85); border-radius: .75rem; background-color: rgba(15,23,42,.7); padding: .2rem; }
+    .rtg-logo-print { width: 4rem; height: 4rem; margin: 0 auto; }
+    body.light-mode { background-color: #f3f4f6; color: #1f2937; }
+    body.light-mode .bg-slate-950, body.light-mode .bg-slate-900, body.light-mode .bg-brand-cardBg { background-color: #ffffff !important; }
+    body.light-mode .bg-slate-900\/80 { background-color: rgba(255,255,255,.9) !important; }
+    body.light-mode .text-white, body.light-mode .text-slate-200, body.light-mode .text-slate-300 { color: #111827 !important; }
+    body.light-mode .text-slate-400, body.light-mode .text-slate-500 { color: #64748b !important; }
+    body.light-mode .border-slate-800, body.light-mode .border-slate-700 { border-color: #d1d5db !important; }
+    body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f8fafc !important; color: #111827 !important; border-color: #cbd5e1 !important; }
+    body.light-mode header { background-color: #ffffff !important; color: #111827 !important; }
+    body.light-mode .shadow-md, body.light-mode .shadow-xl, body.light-mode .shadow-2xl { box-shadow: 0 12px 30px rgba(15,23,42,.10) !important; }
     @media print {
       body > *:not(#printModal) { display: none !important; }
       #printModal { display: flex !important; position: static !important; background: none !important; }
@@ -56,7 +70,7 @@
   <!-- شاشة الترخيص -->
   <div id="licenseOverlay" class="fixed inset-0 bg-slate-950/95 backdrop-blur-xl z-50 flex items-center justify-center p-4">
     <div class="bg-brand-cardBg rounded-3xl p-6 w-full max-w-md shadow-2xl border border-slate-800 text-center space-y-4">
-      <img src="rtg-gearx-logo.png" alt="RTG GEARX" class="w-28 h-28 object-contain mx-auto rounded-2xl">
+      <div class="rtg-logo rtg-logo-large" role="img" aria-label="RTG GEARX"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="rtgRed" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ff4b57"/><stop offset="0.55" stop-color="#ff1e27"/><stop offset="1" stop-color="#8f0f18"/></linearGradient><linearGradient id="rtgSilver" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#cbd5e1"/><stop offset="1" stop-color="#475569"/></linearGradient></defs><path d="M19 32 L41 18 L41 86 L19 74 Z" fill="url(#rtgSilver)"/><path d="M101 32 L79 18 L79 86 L101 74 Z" fill="url(#rtgSilver)"/><path d="M49 14 L73 4 L73 42 L49 54 Z" fill="url(#rtgRed)"/><path d="M77 37 L98 51 L76 72 L56 61 Z" fill="url(#rtgRed)"/><path d="M44 58 L60 70 L72 60 L72 83 L60 94 L44 84 Z" fill="url(#rtgSilver)"/><path d="M42 43 L56 53 L49 62 L42 57 Z" fill="url(#rtgSilver)"/></svg></div>
       <div>
         <h2 class="text-xl font-black text-white tracking-wide">RTG GEARX</h2>
         <p class="text-xs text-slate-400 mt-1">بوابة تفعيل ترخيص المنظومة الذكية</p>
@@ -77,14 +91,16 @@
   <!-- الهيدر -->
   <header class="bg-slate-900 border-b border-slate-800 text-white px-4 py-3 shadow-md sticky top-0 z-30 flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <img src="rtg-gearx-logo.png" alt="RTG GEARX" class="w-9 h-9 object-contain rounded-xl border border-slate-700">
+      <div class="rtg-logo rtg-logo-small" role="img" aria-label="RTG GEARX"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M19 32 L41 18 L41 86 L19 74 Z" fill="#dbe4ef"/><path d="M101 32 L79 18 L79 86 L101 74 Z" fill="#f8fafc"/><path d="M49 14 L73 4 L73 42 L49 54 Z" fill="#ff1e27"/><path d="M77 37 L98 51 L76 72 L56 61 Z" fill="#dc1824"/><path d="M44 58 L60 70 L72 60 L72 83 L60 94 L44 84 Z" fill="#cbd5e1"/><path d="M42 43 L56 53 L49 62 L42 57 Z" fill="#f8fafc"/></svg></div>
       <div>
         <h1 class="text-sm font-black tracking-wider text-white">RTG GEARX</h1>
         <p id="shopNameDisplay" class="text-[10px] text-slate-400 font-medium">جاري مزامنة السيرفر...</p>
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="syncData()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center justify-center transition-colors glow-btn" title="مزامنة">
+      <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center justify-center transition-colors glow-btn" title="تبديل الوضع">
+        <i id="themeIcon" class="fa-solid fa-moon text-xs"></i>
+      </button>      <button onclick="syncData()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center justify-center transition-colors glow-btn" title="مزامنة">
         <i id="syncIcon" class="fa-solid fa-rotate text-xs"></i>
       </button>
       <button onclick="triggerLogoutModal()" class="w-8 h-8 rounded-lg bg-brand-red/10 hover:bg-brand-red/20 text-brand-red flex items-center justify-center transition-colors border border-brand-red/20 glow-btn" title="تسجيل الخروج">
@@ -116,7 +132,11 @@
           <i class="fa-solid fa-chart-pie text-sm"></i> لوحة التقارير
         </button>
       </div>
-    </div>
+      <div class="wheel-item">
+        <button onclick="switchTab('debts')" id="tab-debts" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-slate-800 transition-all flex items-center gap-2">
+          <i class="fa-solid fa-hand-holding-dollar text-sm"></i> الديون
+        </button>
+      </div>    </div>
   </nav>
 
   <main class="flex-1 p-3 max-w-7xl w-full mx-auto content-container">
@@ -350,6 +370,35 @@
         </div>
       </div>
     </section>
+
+    <!-- صفحة الديون -->
+    <section id="view-debts" class="tab-content hidden space-y-3">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm"><p class="text-[10px] text-slate-400 font-bold">ديون لك</p><h3 id="debtOwedToMe" class="text-sm font-black text-emerald-400 mt-1">0.00 د.ل</h3></div>
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm"><p class="text-[10px] text-slate-400 font-bold">ديون عليك</p><h3 id="debtIOwe" class="text-sm font-black text-brand-red mt-1">0.00 د.ل</h3></div>
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm"><p class="text-[10px] text-slate-400 font-bold">ديون مفتوحة</p><h3 id="debtOpenCount" class="text-sm font-black text-white mt-1">0</h3></div>
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm"><p class="text-[10px] text-slate-400 font-bold">متأخرة</p><h3 id="debtLateCount" class="text-sm font-black text-amber-400 mt-1">0</h3></div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        <div class="lg:col-span-4 bg-brand-cardBg rounded-xl border border-slate-800 shadow-sm p-3 space-y-2">
+          <h4 class="text-xs font-bold text-slate-200 flex items-center gap-1.5 border-b border-slate-800 pb-2"><i class="fa-solid fa-plus text-brand-red"></i> إضافة أو تحديث دين</h4>
+          <select id="debtType" class="w-full px-2.5 py-2 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:border-brand-red"><option value="لي">لي عند شخص</option><option value="علي">علي لشخص</option></select>
+          <input type="text" id="debtName" placeholder="اسم الشخص" class="w-full px-2.5 py-2 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:border-brand-red">
+          <input type="text" id="debtPhone" placeholder="رقم الهاتف" class="w-full px-2.5 py-2 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:border-brand-red">
+          <input type="number" id="debtAmount" placeholder="المبلغ المراد إضافته" class="w-full px-2.5 py-2 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:border-brand-red">
+          <input type="date" id="debtDueDate" class="w-full px-2.5 py-2 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:border-brand-red">
+          <textarea id="debtNote" placeholder="ملاحظة" rows="3" class="w-full px-2.5 py-2 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:border-brand-red resize-none"></textarea>
+          <button onclick="addOrUpdateDebt()" class="w-full bg-brand-red hover:bg-brand-darkRed text-white font-bold py-2.5 rounded-xl shadow-md text-xs glow-btn"><i class="fa-solid fa-floppy-disk ml-1"></i> حفظ الدين</button>
+        </div>
+        <div class="lg:col-span-8 space-y-2">
+          <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 shadow-sm space-y-2">
+            <div class="relative"><i class="fa-solid fa-magnifying-glass text-slate-500 absolute right-3 top-2.5 text-xs"></i><input type="text" id="debtSearch" oninput="renderDebts()" placeholder="ابحث بالاسم أو الهاتف..." class="w-full pr-8 pl-3 py-2 text-xs bg-slate-950 border border-slate-800 text-white rounded-lg outline-none focus:border-brand-red"></div>
+            <div class="grid grid-cols-2 gap-1.5"><select id="debtTypeFilter" onchange="renderDebts()" class="px-2 py-1.5 text-[10px] bg-slate-950 border border-slate-800 text-slate-300 rounded-lg outline-none focus:border-brand-red"><option value="">كل الأنواع</option><option value="لي">لي</option><option value="علي">علي</option></select><select id="debtStatusFilter" onchange="renderDebts()" class="px-2 py-1.5 text-[10px] bg-slate-950 border border-slate-800 text-slate-300 rounded-lg outline-none focus:border-brand-red"><option value="">كل الحالات</option><option value="مفتوح">مفتوح</option><option value="مدفوع جزئياً">مدفوع جزئياً</option><option value="مغلق">مغلق</option></select></div>
+          </div>
+          <div id="debtsListContainer" class="space-y-2"></div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- مودال الإرجاع -->
@@ -392,7 +441,7 @@
     <div class="bg-white rounded-2xl p-4 w-full max-w-sm shadow-2xl space-y-4 max-h-[90vh] flex flex-col justify-between">
       <div class="overflow-y-auto p-1 border border-slate-100 rounded-xl bg-slate-50" id="printTemplateArea">
         <div class="text-center font-mono text-[11px] text-slate-800 p-2 space-y-1" dir="rtl">
-          <img src="rtg-gearx-logo.png" alt="RTG GEARX" class="w-16 h-16 object-contain mx-auto">
+          <div class="rtg-logo rtg-logo-print" role="img" aria-label="RTG GEARX"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M19 32 L41 18 L41 86 L19 74 Z" fill="#64748b"/><path d="M101 32 L79 18 L79 86 L101 74 Z" fill="#cbd5e1"/><path d="M49 14 L73 4 L73 42 L49 54 Z" fill="#ff1e27"/><path d="M77 37 L98 51 L76 72 L56 61 Z" fill="#b91c1c"/><path d="M44 58 L60 70 L72 60 L72 83 L60 94 L44 84 Z" fill="#94a3b8"/><path d="M42 43 L56 53 L49 62 L42 57 Z" fill="#e2e8f0"/></svg></div>
           <h3 class="text-sm font-bold">RTG GEARX</h3>
           <p id="pShopName" class="text-[10px] text-slate-500">MOBILE & GAMING ACCESSORIES</p>
           <div class="border-b border-dashed border-slate-400 my-1"></div>
@@ -424,11 +473,15 @@
     let SHOP_NAME = "";
     let globalProducts = {};
     let globalOrders = [];
+    let globalDebts = [];
     let cart = [];
     let targetReturnInvoiceId = "";
     const OFFLINE_PRODUCTS_KEY = "rtg_offline_products";
+    const OFFLINE_DEBTS_KEY = "rtg_offline_debts";
+    const THEME_KEY = "rtg_theme_mode";
 
     window.addEventListener("DOMContentLoaded", () => {
+      applySavedTheme();
       const savedKey = localStorage.getItem("rtg_license_key");
       const savedUrl = localStorage.getItem("rtg_script_url");
       const savedShop = localStorage.getItem("rtg_shop_name");
@@ -446,6 +499,14 @@
             renderPosProducts();
             renderInventory();
             populateDropdowns();
+          } catch(e) {}
+        }
+        // تحميل الديون من التخزين المحلي (للعرض السريع قبل المزامنة)
+        const cachedDebts = localStorage.getItem(OFFLINE_DEBTS_KEY);
+        if (cachedDebts) {
+          try {
+            globalDebts = JSON.parse(cachedDebts);
+            renderDebts();
           } catch(e) {}
         }
         syncData();
@@ -536,7 +597,8 @@
       globalOrders = orders || [];
       renderOrders();
       calculateGlobalStats();
-      document.getElementById("syncIcon").classList.remove("fa-spin");
+      // ✅ التعديل: جلب الديون من السيرفر بعد جلب الطلبات
+      executeJsonp(`${API_URL}?action=getDebts&callback=onDebtsFetched`);
     }
 
     function executeJsonp(url) {
@@ -763,6 +825,89 @@
       }).catch(() => showToast("حدث خطأ أثناء إرسال الفاتورة", "error"));
     }
 
+
+    function onDebtsFetched(debts) {
+      globalDebts = debts || [];
+      // ✅ حفظ الديون في التخزين المحلي للعرض السريع عند إعادة التحميل
+      try { localStorage.setItem(OFFLINE_DEBTS_KEY, JSON.stringify(globalDebts)); } catch(e) {}
+      renderDebts();
+      document.getElementById("syncIcon").classList.remove("fa-spin");
+    }
+
+    function getDebtStatusClass(status) {
+      if (status === "مغلق") return "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+      if (status === "مدفوع جزئياً") return "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+      return "bg-brand-red/10 text-brand-red border border-brand-red/20";
+    }
+
+    function renderDebts() {
+      const container = document.getElementById("debtsListContainer");
+      if (!container) return;
+      container.innerHTML = "";
+      const q = (document.getElementById("debtSearch")?.value || "").toLowerCase().trim();
+      const typeFilter = document.getElementById("debtTypeFilter")?.value || "";
+      const statusFilter = document.getElementById("debtStatusFilter")?.value || "";
+      let owedToMe = 0, iOwe = 0, openCount = 0, lateCount = 0, rendered = 0;
+      const today = new Date().toISOString().slice(0, 10);
+      globalDebts.forEach(d => {
+        const remaining = Number(d.remaining) || 0;
+        if (d.status !== "مغلق" && remaining > 0) {
+          openCount++;
+          if (d.type === "لي") owedToMe += remaining;
+          if (d.type === "علي") iOwe += remaining;
+          if (d.dueDate && String(d.dueDate).slice(0, 10) < today) lateCount++;
+        }
+        if (q && !String(d.name || "").toLowerCase().includes(q) && !String(d.phone || "").includes(q)) return;
+        if (typeFilter && d.type !== typeFilter) return;
+        if (statusFilter && d.status !== statusFilter) return;
+        rendered++;
+        const card = document.createElement("div");
+        card.className = "bg-brand-cardBg border border-slate-800 rounded-xl p-3 shadow-sm space-y-2 text-right";
+        card.innerHTML = `<div class="flex items-center justify-between border-b border-slate-800 pb-2"><div><p class="text-sm font-black text-white">${d.name || "غير محدد"}</p><p class="text-[10px] text-slate-500">${d.phone || "بدون هاتف"} - ${d.id}</p></div><span class="text-[10px] px-2 py-1 rounded-full font-bold ${getDebtStatusClass(d.status)}">${d.type} / ${d.status}</span></div><div class="grid grid-cols-3 gap-2 text-center"><div class="bg-slate-900 rounded-lg p-2"><p class="text-[10px] text-slate-500">الأصلي</p><p class="text-xs font-black text-white">${Number(d.original).toFixed(2)}</p></div><div class="bg-slate-900 rounded-lg p-2"><p class="text-[10px] text-slate-500">المدفوع</p><p class="text-xs font-black text-emerald-400">${Number(d.paid).toFixed(2)}</p></div><div class="bg-slate-900 rounded-lg p-2"><p class="text-[10px] text-slate-500">المتبقي</p><p class="text-xs font-black text-brand-red">${remaining.toFixed(2)}</p></div></div><p class="text-[11px] text-slate-500"><i class="fa-solid fa-calendar ml-1"></i>استحقاق: ${d.dueDate || "غير محدد"} | آخر تحديث: ${d.updatedAt || "-"}</p>${d.note ? `<p class="text-[11px] text-slate-400 bg-slate-900 border border-slate-800 rounded-lg p-2">${d.note}</p>` : ""}<div class="flex items-center gap-1 justify-end">${d.status !== "مغلق" ? `<button onclick="promptDebtPayment('${d.id}')" class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-1 rounded font-bold"><i class="fa-solid fa-coins"></i> دفعة</button><button onclick="closeDebt('${d.id}')" class="text-[10px] bg-slate-700 hover:bg-slate-600 border border-slate-600 text-slate-300 px-2 py-1 rounded font-bold"><i class="fa-solid fa-lock"></i> إغلاق</button>` : `<span class="text-[10px] text-emerald-400 font-bold">تم الإغلاق</span>`}</div>`;
+        container.appendChild(card);
+      });
+      document.getElementById("debtOwedToMe").innerText = owedToMe.toFixed(2) + " د.ل";
+      document.getElementById("debtIOwe").innerText = iOwe.toFixed(2) + " د.ل";
+      document.getElementById("debtOpenCount").innerText = openCount;
+      document.getElementById("debtLateCount").innerText = lateCount;
+      if (rendered === 0) container.innerHTML = '<div class="text-center text-slate-500 text-xs py-8"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>لا توجد ديون مطابقة</div>';
+    }
+
+    function addOrUpdateDebt() {
+      if (!API_URL) { showToast("لا يوجد اتصال بالسيرفر", "error"); return; }
+      const payload = { action: "addOrUpdateDebt", type: document.getElementById("debtType").value, name: document.getElementById("debtName").value.trim(), phone: document.getElementById("debtPhone").value.trim(), amount: parseFloat(document.getElementById("debtAmount").value) || 0, dueDate: document.getElementById("debtDueDate").value, note: document.getElementById("debtNote").value.trim() };
+      if (!payload.name || payload.amount <= 0) { showToast("أدخل الاسم والمبلغ بشكل صحيح", "error"); return; }
+      fetch(API_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).then(() => { ["debtName","debtPhone","debtAmount","debtDueDate","debtNote"].forEach(id => document.getElementById(id).value = ""); showToast("تم حفظ الدين بنجاح", "success"); setTimeout(() => syncData(), 1200); }).catch(() => showToast("حدث خطأ أثناء حفظ الدين", "error"));
+    }
+
+    function promptDebtPayment(debtId) {
+      const amount = parseFloat(prompt("أدخل قيمة الدفعة:") || "0");
+      if (!amount || amount <= 0 || !API_URL) return;
+      executeJsonp(`${API_URL}?action=updateDebtPaymentGet&debtId=${encodeURIComponent(debtId)}&amount=${encodeURIComponent(amount)}&callback=onDebtUpdatedResponse`);
+    }
+
+    function closeDebt(debtId) {
+      if (!API_URL || !confirm("هل تريد إغلاق هذا الدين؟")) return;
+      executeJsonp(`${API_URL}?action=closeDebtGet&debtId=${encodeURIComponent(debtId)}&callback=onDebtUpdatedResponse`);
+    }
+
+    function onDebtUpdatedResponse(res) {
+      showToast(res && res.success ? "تم تحديث الدين" : "لم يتم تحديث الدين", res && res.success ? "success" : "error");
+      syncData();
+    }
+
+    function applySavedTheme() {
+      const mode = localStorage.getItem(THEME_KEY) || "dark";
+      document.body.classList.toggle("light-mode", mode === "light");
+      const icon = document.getElementById("themeIcon");
+      if (icon) icon.className = mode === "light" ? "fa-solid fa-sun text-xs" : "fa-solid fa-moon text-xs";
+    }
+
+    function toggleTheme() {
+      const next = document.body.classList.contains("light-mode") ? "dark" : "light";
+      localStorage.setItem(THEME_KEY, next);
+      applySavedTheme();
+    }
     function renderOrders() {
       const container = document.getElementById("ordersListContainer");
       container.innerHTML = "";
@@ -1030,6 +1175,7 @@
       syncData,
       onProductsFetched,
       onOrdersFetched,
+      onDebtsFetched,
       executeJsonp,
       showToast,
       switchTab,
@@ -1044,6 +1190,12 @@
       toggleCashFields,
       submitOrder,
       renderOrders,
+      renderDebts,
+      addOrUpdateDebt,
+      promptDebtPayment,
+      closeDebt,
+      onDebtUpdatedResponse,
+      toggleTheme,
       updateOrderStatus,
       onStatusUpdatedResponse,
       triggerReturnModal,
