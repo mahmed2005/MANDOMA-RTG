@@ -436,6 +436,65 @@
     </div>
   </div>
 
+  <!-- مودال دفعة الدين -->
+  <div id="debtPaymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-brand-cardBg rounded-2xl border border-emerald-500/30 p-5 w-full max-w-sm shadow-2xl shadow-emerald-500/20 text-center space-y-3 animate-[fadeIn_0.2s_ease-out]">
+      <div class="w-14 h-14 bg-emerald-500/15 text-emerald-400 rounded-full flex items-center justify-center text-2xl mx-auto border-2 border-emerald-500/30" style="box-shadow: 0 0 20px rgba(16,185,129,0.35);">
+        <i class="fa-solid fa-coins"></i>
+      </div>
+      <div>
+        <h3 class="text-sm font-black text-white">تسجيل دفعة جديدة</h3>
+        <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">أدخل قيمة الدفعة المراد تسجيلها لهذا الدين</p>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2">
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="text-slate-500 font-bold">المتبقي على الدين:</span>
+          <span id="paymentRemainingDisplay" class="text-brand-red font-black">0.00 د.ل</span>
+        </div>
+        <div class="relative">
+          <i class="fa-solid fa-money-bill-wave text-emerald-400 absolute right-3 top-3 text-sm"></i>
+          <input type="number" id="paymentAmountInput" placeholder="أدخل قيمة الدفعة" min="0" step="0.01" class="w-full pr-9 pl-3 py-2.5 text-sm bg-slate-950 border border-slate-700 text-white rounded-xl outline-none focus:border-emerald-400 text-center font-black transition-all">
+        </div>
+        <div class="flex gap-1.5 pt-1">
+          <button onclick="fillPaymentPercent(25)" class="flex-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-1.5 rounded-lg transition-all">25%</button>
+          <button onclick="fillPaymentPercent(50)" class="flex-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-1.5 rounded-lg transition-all">50%</button>
+          <button onclick="fillPaymentPercent(75)" class="flex-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-1.5 rounded-lg transition-all">75%</button>
+          <button onclick="fillPaymentPercent(100)" class="flex-1 text-[10px] bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 font-bold py-1.5 rounded-lg transition-all">الكل</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button id="confirmPaymentBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs glow-btn shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-1.5 transition-all">
+          <i class="fa-solid fa-check"></i> تأكيد الدفعة
+        </button>
+        <button onclick="closePaymentModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all">
+          <i class="fa-solid fa-xmark"></i> إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- مودال إغلاق الدين -->
+  <div id="closeDebtModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-brand-cardBg rounded-2xl border border-brand-red/30 p-5 w-full max-w-sm shadow-2xl shadow-brand-red/20 text-center space-y-3 animate-[fadeIn_0.2s_ease-out]">
+      <div class="w-14 h-14 bg-brand-red/15 text-brand-red rounded-full flex items-center justify-center text-2xl mx-auto border-2 border-brand-red/30 glow-red">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div>
+        <h3 class="text-sm font-black text-white">تأكيد إغلاق الدين 100%؟</h3>
+        <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">سيتم اعتبار هذا الدين مُسدّداً بالكامل وتغيير حالته إلى <span class="text-emerald-400 font-bold">مغلق</span>.</p>
+        <p class="text-[10px] text-slate-500 mt-1">هل أنت متأكد من هذا الإجراء؟</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button id="confirmCloseDebtBtn" class="bg-brand-red hover:bg-brand-darkRed text-white font-bold py-2.5 rounded-xl text-xs glow-btn shadow-lg shadow-brand-red/20 flex items-center justify-center gap-1.5 transition-all">
+          <i class="fa-solid fa-check"></i> نعم، إغلاق نهائي
+        </button>
+        <button onclick="closeCloseDebtModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all">
+          <i class="fa-solid fa-xmark"></i> إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- مودال الطباعة -->
   <div id="printModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-4 w-full max-w-sm shadow-2xl space-y-4 max-h-[90vh] flex flex-col justify-between">
@@ -880,14 +939,79 @@
       fetch(API_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).then(() => { ["debtName","debtPhone","debtAmount","debtDueDate","debtNote"].forEach(id => document.getElementById(id).value = ""); showToast("تم حفظ الدين بنجاح", "success"); setTimeout(() => syncData(), 1200); }).catch(() => showToast("حدث خطأ أثناء حفظ الدين", "error"));
     }
 
+    let targetPaymentDebtId = "";
+    let targetPaymentRemaining = 0;
+
     function promptDebtPayment(debtId) {
-      const amount = parseFloat(prompt("أدخل قيمة الدفعة:") || "0");
-      if (!amount || amount <= 0 || !API_URL) return;
+      if (!API_URL) { showToast("لا يوجد اتصال بالسيرفر", "error"); return; }
+      const debt = globalDebts.find(d => String(d.id) === String(debtId));
+      const remaining = debt ? (Number(debt.remaining) || 0) : 0;
+      triggerPaymentModal(debtId, remaining);
+    }
+
+    function triggerPaymentModal(debtId, remaining) {
+      targetPaymentDebtId = debtId;
+      targetPaymentRemaining = remaining;
+      document.getElementById("paymentRemainingDisplay").innerText = remaining.toFixed(2) + " د.ل";
+      document.getElementById("paymentAmountInput").value = "";
+      const modal = document.getElementById("debtPaymentModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.getElementById("confirmPaymentBtn").onclick = () => confirmPayment();
+      setTimeout(() => document.getElementById("paymentAmountInput").focus(), 100);
+    }
+
+    function closePaymentModal() {
+      const modal = document.getElementById("debtPaymentModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      targetPaymentDebtId = "";
+      targetPaymentRemaining = 0;
+    }
+
+    function fillPaymentPercent(pct) {
+      const val = (targetPaymentRemaining * pct) / 100;
+      document.getElementById("paymentAmountInput").value = val.toFixed(2);
+    }
+
+    function confirmPayment() {
+      const amount = parseFloat(document.getElementById("paymentAmountInput").value) || 0;
+      if (!amount || amount <= 0) {
+        showToast("الرجاء إدخال قيمة صحيحة للدفعة", "error");
+        return;
+      }
+      if (!targetPaymentDebtId || !API_URL) return;
+      const debtId = targetPaymentDebtId;
+      closePaymentModal();
       executeJsonp(`${API_URL}?action=updateDebtPaymentGet&debtId=${encodeURIComponent(debtId)}&amount=${encodeURIComponent(amount)}&callback=onDebtUpdatedResponse`);
     }
 
+    let targetCloseDebtId = "";
+
     function closeDebt(debtId) {
-      if (!API_URL || !confirm("هل تريد إغلاق هذا الدين؟")) return;
+      if (!API_URL) { showToast("لا يوجد اتصال بالسيرفر", "error"); return; }
+      triggerCloseDebtModal(debtId);
+    }
+
+    function triggerCloseDebtModal(debtId) {
+      targetCloseDebtId = debtId;
+      const modal = document.getElementById("closeDebtModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.getElementById("confirmCloseDebtBtn").onclick = () => confirmCloseDebt();
+    }
+
+    function closeCloseDebtModal() {
+      const modal = document.getElementById("closeDebtModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      targetCloseDebtId = "";
+    }
+
+    function confirmCloseDebt() {
+      if (!targetCloseDebtId || !API_URL) return;
+      const debtId = targetCloseDebtId;
+      closeCloseDebtModal();
       executeJsonp(`${API_URL}?action=closeDebtGet&debtId=${encodeURIComponent(debtId)}&callback=onDebtUpdatedResponse`);
     }
 
@@ -1193,7 +1317,14 @@
       renderDebts,
       addOrUpdateDebt,
       promptDebtPayment,
+      triggerPaymentModal,
+      closePaymentModal,
+      fillPaymentPercent,
+      confirmPayment,
       closeDebt,
+      triggerCloseDebtModal,
+      closeCloseDebtModal,
+      confirmCloseDebt,
       onDebtUpdatedResponse,
       toggleTheme,
       updateOrderStatus,
